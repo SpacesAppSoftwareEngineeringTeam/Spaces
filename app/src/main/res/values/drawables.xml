@@ -1,0 +1,10 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_share_spot" type="mipmap">@mipmap/ic_menu_share_spot</item>
+    <item name="ic_menu_locate_friends" type="mipmap">@mipmap/ic_menu_locate_friends</item>
+    <item name="ic_menu_add_friends" type="mipmap">@mipmap/ic_menu_add_friends</item>
+    <!--
+    <item name="ic_menu_manage" type="drawable">@android:drawable/ic_menu_manage</item>
+    -->
+    <item name="ic_menu_outlets" type="mipmap">@mipmap/ic_menu_outlets</item>
+    <item name="ic_menu_whiteboards" type="mipmap">@mipmap/ic_menu_whiteboards</item>
+</resources>

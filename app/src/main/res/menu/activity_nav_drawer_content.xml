@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_share_spot"
+            android:icon="@mipmap/ic_menu_share_spot"
+            android:title="Share your spot" />
+        <item
+            android:id="@+id/nav_locate_friends"
+            android:icon="@mipmap/ic_menu_locate_friends"
+            android:title="Locate friends nearby" />
+        <item
+            android:id="@+id/nav_add_friends"
+            android:icon="@mipmap/ic_menu_add_friends"
+            android:title="Add friends" />
+    </group>
+
+    <item android:title="Filter Results">
+        <menu>
+            <item
+                android:id="@+id/nav_outlets"
+                android:icon="@mipmap/ic_menu_outlets"
+                android:title="Outlets" />
+            <item
+                android:id="@+id/nav_whiteboards"
+                android:icon="@mipmap/ic_menu_whiteboards"
+                android:title="Whiteboards" />
+        </menu>
+    </item>
+
+</menu>

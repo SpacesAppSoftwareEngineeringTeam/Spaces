@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Spaces</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_search">Search</string>
+
+    <string name="username">Barbara Snyder</string>
+    <string name="case_ID">babs</string>
+    <string name="case_email">babs@case.edu</string>
+</resources>
