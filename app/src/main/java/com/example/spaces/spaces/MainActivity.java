@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +18,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView mainRecyclerView;
+    private RecyclerView.Adapter mainRecyclerAdapter;
+    private RecyclerView.LayoutManager mainRecyclerLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mainRecyclerView = (RecyclerView) findViewById(R.id.spaceList);
+
+        mainRecyclerLayoutManager = new LinearLayoutManager(this);
+        mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
+
+        String[] testSpacesData = {"KSL 3rd Floor", "Nord", "Glennen EECS Lounge", "test1", "test2", "test3",
+                                    "test4", "test5", "test6", "test7", "test8", "test9", "test10", "test11"};
+        mainRecyclerAdapter = new SpacesAdapter(testSpacesData);
+        mainRecyclerView.setAdapter(mainRecyclerAdapter);
     }
 
     @Override
