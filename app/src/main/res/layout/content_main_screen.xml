@@ -8,18 +8,19 @@
     tools:context="com.example.spaces.spaces.MainActivity"
     tools:showIn="@layout/app_bar">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/spaceList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/spaceList"
+            android:layout_width="match_parent"
+            android:layout_height="523dp"
+            android:layout_marginTop="8dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </android.support.v7.widget.RecyclerView>
-
+        </android.support.v7.widget.RecyclerView>
 
 
 </android.support.constraint.ConstraintLayout>
