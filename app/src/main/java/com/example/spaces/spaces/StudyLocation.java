@@ -22,6 +22,10 @@ class StudyLocation {
     private ArrayList<Review> reviews = new ArrayList<Review>();
     private boolean accessibilityFlag = false;
 
+    public StudyLocation(String locationName) {
+        this.locationName = locationName;
+    }
+
     ArrayList<Drawable> getPictures() {
         return pictures;
     }
@@ -100,6 +104,18 @@ class StudyLocation {
 
     void addReview(Review review){
         reviews.add(review);
+        int size = reviews.size();
+        setOverallReviewAvg(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
+        setQuietnessAvg(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
+        setBusinessAvg(calcNewAvg(getBusinessAvg(), size, review.getBusiness()));
+        setComfortAvg(calcNewAvg(getComfortAvg(), size, review.getComfort()));
+        setWhiteboardAvg(calcNewAvg(getWhiteboardAvg(), size, review.getWhiteboards()));
+        setOutletAvg(calcNewAvg(getOutletAvg(), size, review.getOutlets()));
+        setSeatingAvg(calcNewAvg(getSeatingAvg(), size, review.getSeating()));
+    }
+
+    double calcNewAvg(double oldAvg, int numReviews, int newReviewScore){
+        return (oldAvg * (numReviews - 1)/ numReviews) + (newReviewScore / numReviews);
     }
 
     boolean isAccessibilityFlag() {
@@ -111,7 +127,6 @@ class StudyLocation {
     }
 
     String getLocationName() {
-
         return locationName;
     }
 

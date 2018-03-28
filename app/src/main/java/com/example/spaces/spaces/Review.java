@@ -8,18 +8,24 @@ import java.util.Date;
 
 class Review {
 
-    String locationID = "";
-    String userID = "";
-    Date submissionDate;
-    int overall = 0;
-    int quietness = 0;
-    int business = 0;
-    int comfort = 0;
-    int whiteboards = 0;
-    int outlets = 0;
-    int seating = 0;
-    String comment = "";
-    String accessibilityComment = "";
+    private String locationID = "";
+    private String userID = "";
+    private Date submissionDate;
+    private int overall = 0;
+    private int quietness = 0;
+    private int business = 0;
+    private int comfort = 0;
+    private int whiteboards = 0;
+    private int outlets = 0;
+    private int seating = 0;
+    private String comment = "";
+    private String accessibilityComment = "";
+
+    public Review(String locationID, String userID, Date submissionDate) {
+        this.locationID = locationID;
+        this.userID = userID;
+        this.submissionDate = submissionDate;
+    }
 
     String getLocationID() {
         return locationID;

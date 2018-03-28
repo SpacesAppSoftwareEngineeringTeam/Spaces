@@ -7,6 +7,11 @@ import java.util.ArrayList;
  */
 
 class User {
+
+    User(String userID) {
+        this.userID = userID;
+    }
+
     String getUserID() {
         return userID;
     }
@@ -22,6 +27,10 @@ class User {
     void setFriendList(ArrayList<String> friendList) {
         this.friendList = friendList;
     }
+
+    void addFriend(String friend) { friendList.add(friend); }
+
+    boolean removeFriend(String friend) { return friendList.remove(friend); }
 
     String getLocationID() {
         return locationID;
