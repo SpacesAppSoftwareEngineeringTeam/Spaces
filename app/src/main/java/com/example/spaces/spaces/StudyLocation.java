@@ -20,7 +20,7 @@ class StudyLocation {
     private double outletAvg = 0;
     private double seatingAvg = 0;
     private ArrayList<Review> reviews = new ArrayList<Review>();
-    private boolean accessabilityFlag = false;
+    private boolean accessibilityFlag = false;
 
     ArrayList<Drawable> getPictures() {
         return pictures;
@@ -102,12 +102,12 @@ class StudyLocation {
         reviews.add(review);
     }
 
-    boolean isAccessabilityFlag() {
-        return accessabilityFlag;
+    boolean isAccessibilityFlag() {
+        return accessibilityFlag;
     }
 
-    void setAccessabilityFlag(boolean accessabilityFlag) {
-        this.accessabilityFlag = accessabilityFlag;
+    void setAccessibilityFlag(boolean accessibilityFlag) {
+        this.accessibilityFlag = accessibilityFlag;
     }
 
     String getLocationName() {
