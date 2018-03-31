@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,8 +55,14 @@ public class MainActivity extends AppCompatActivity
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
 
-        String[] testSpacesData = {"KSL 3rd Floor", "Nord", "Glennen EECS Lounge", "test1", "test2", "test3",
-                                    "test4", "test5", "test6", "test7", "test8", "test9", "test10", "test11"};
+        // Test location array
+        StudyLocation[] testSpacesData = new StudyLocation[10];
+        Random r = new Random();
+        for (int i = 0; i < testSpacesData.length; i++) {
+            testSpacesData[i] = new StudyLocation("Space" + i);
+            testSpacesData[i].setOverallReviewAvg(5 * r.nextDouble());
+        }
+
         mainRecyclerAdapter = new SpacesAdapter(testSpacesData);
         mainRecyclerView.setAdapter(mainRecyclerAdapter);
     }

@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v7.widget.CardView;
+import android.widget.ImageView;
+import android.graphics.Color;
 
 /**
  * Created by Steven on 3/14/2018.
@@ -13,21 +15,23 @@ import android.support.v7.widget.CardView;
 
 public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder> {
 
-    private String[] mDataset;
+    private StudyLocation[] mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        //We will probably want more views to be here (like a CardView maybe?)
-        public TextView mTextView;
-        public CardView mCardView;
+        public CardView mCardView;       // Containing card for space
+        public TextView SpaceName;       // Space name
+        public ImageView SpaceImage;     // Space thumbnail
+        public TextView SpaceRating;     // Overall space rating
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = v.findViewById(R.id.spaceName);
+            SpaceName = v.findViewById(R.id.spaceName);
             mCardView = v.findViewById(R.id.cardView);
+            SpaceRating = v.findViewById(R.id.spaceRating);
+            SpaceImage = v.findViewById(R.id.spaceImage);
 
             //Sound example code I found used below line to set some stuff for listening to clicks
             //mTextView.setOnClickListener(this);
@@ -36,7 +40,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SpacesAdapter(String[] myDataset) {
+    public SpacesAdapter(StudyLocation[] myDataset) {
         mDataset = myDataset;
     }
 
@@ -56,7 +60,37 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
+
+        // Set card characteristics
+        if (position % 2 == 0)           // Alternate light gray and gray for enhanced readability
+            holder.mCardView.setCardBackgroundColor(Color.GRAY);
+        else
+            holder.mCardView.setCardBackgroundColor(Color.LTGRAY);
+
+        // Set space name
+        holder.SpaceName.setText(mDataset[position].getLocationName());
+        holder.SpaceName.setTextSize(24);
+
+        // Set space thumbnail
+        //holder.SpaceImage.setImage????
+
+        // Set space rating
+        StringBuilder s = new StringBuilder();        // Display rating to one decimal
+        String rating = Double.toString(mDataset[position].getOverallReviewAvg());
+        for (int i = 0; i < 3; i++) {
+            s.append(rating.charAt(i));
+        }
+        rating = s.toString();
+        holder.SpaceRating.setText(rating);
+        int RatingColor;                             // Set text color based on rating value
+        if (mDataset[position].getOverallReviewAvg() < 2)
+            RatingColor = Color.RED;   // 0-1 rating is red
+        else if (mDataset[position].getOverallReviewAvg() < 4)
+            RatingColor = Color.YELLOW; // 2-4 rating is yellow
+        else
+            RatingColor = Color.GREEN;   // 4+ rating is green
+        holder.SpaceRating.setTextSize(18);
+        holder.SpaceRating.setTextColor(RatingColor);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
