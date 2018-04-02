@@ -8,4 +8,8 @@
     <color name="colorPrimary">#4688ea</color>
     <color name="colorPrimaryDark">#0851aa</color>
     <color name="colorAccent">#FF8742</color>
+
+    <color name="textDefault">#808080</color>
+    <color name="backgroundDefault">#FAFAFA</color>
+    <color name="pureWhite">#FFFFFF</color>
 </resources>

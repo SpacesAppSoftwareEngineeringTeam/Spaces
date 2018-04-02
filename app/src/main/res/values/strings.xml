@@ -9,4 +9,8 @@
     <string name="username">Barbara Snyder</string>
     <string name="case_ID">babs</string>
     <string name="case_email">babs@case.edu</string>
+
+    <string name="add_space_title">Add a new study space:</string>
+    <string name="add_space_name_hint">"Name (e.g. \"Sears Lobby\")</string>
+    <string name="add_space_imagecount">Pictures Added: 0</string>
 </resources>

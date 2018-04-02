@@ -3,7 +3,6 @@ package com.example.spaces.spaces;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -32,15 +31,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace this with \"add new space\" action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -50,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainRecyclerView = (RecyclerView) findViewById(R.id.spaceList);
+        mainRecyclerView = findViewById(R.id.spaceList);
 
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
@@ -62,6 +52,15 @@ public class MainActivity extends AppCompatActivity
             testSpacesData[i] = new StudyLocation("Space" + i);
             testSpacesData[i].setOverallReviewAvg(5 * r.nextDouble());
         }
+
+        // Setup add space FAB
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start(AddSpaceActivity.class);
+            }
+        });
 
         mainRecyclerAdapter = new SpacesAdapter(testSpacesData);
         mainRecyclerView.setAdapter(mainRecyclerAdapter);
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_share_spot) {
-            // Handle the camera action
+
         } else if (id == R.id.nav_locate_friends) {
 
         } else if (id == R.id.nav_add_friends) {
@@ -124,7 +123,6 @@ public class MainActivity extends AppCompatActivity
 
     //starts a typical activity
     private void start(Class c) {
-        Intent toStart = new Intent(this, c);
-        startActivity(toStart);
+        startActivity(new Intent(this, c));
     }
 }
