@@ -1,5 +1,6 @@
 package com.example.spaces.spaces;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.graphics.Color;
+import android.view.View.OnClickListener;
 
 /**
  * Created by Steven on 3/14/2018.
@@ -33,8 +35,13 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
             SpaceRating = v.findViewById(R.id.spaceRating);
             SpaceImage = v.findViewById(R.id.spaceImage);
 
-            //Sound example code I found used below line to set some stuff for listening to clicks
-            //mTextView.setOnClickListener(this);
+            // Select an individual space and retrieve the space page
+            mCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // @TODO Open the space page for the appropriate location
+                }
+            });
         }
 
     }
