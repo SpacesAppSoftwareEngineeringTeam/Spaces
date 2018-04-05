@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.graphics.Color;
 import android.view.View.OnClickListener;
 
+import com.example.spaces.spaces.models.StudyLocation;
+
 /**
  * Created by Steven on 3/14/2018.
  */

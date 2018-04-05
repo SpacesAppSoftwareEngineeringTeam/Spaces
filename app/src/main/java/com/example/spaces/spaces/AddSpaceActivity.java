@@ -75,7 +75,7 @@ public class AddSpaceActivity extends Activity {
         // Request to get images from the gallery detected
         if (resultCode == Activity.RESULT_OK && requestCode == GET_FROM_GALLERY) {
             Uri selectedImage = data.getData();
-            Bitmap image = null;
+            Bitmap image;
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 int minSize = image.getByteCount();

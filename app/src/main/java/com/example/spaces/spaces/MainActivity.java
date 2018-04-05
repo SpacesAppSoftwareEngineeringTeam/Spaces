@@ -14,6 +14,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.spaces.spaces.models.StudyLocation;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
