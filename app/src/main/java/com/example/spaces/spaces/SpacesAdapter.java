@@ -9,6 +9,8 @@ import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.graphics.Color;
 
+import com.example.spaces.spaces.models.StudyLocation;
+
 /**
  * Created by Steven on 3/14/2018.
  */
