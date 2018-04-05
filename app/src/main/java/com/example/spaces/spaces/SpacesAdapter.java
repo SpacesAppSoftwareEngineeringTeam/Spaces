@@ -1,6 +1,5 @@
 package com.example.spaces.spaces;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,9 @@ import android.widget.TextView;
 import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.graphics.Color;
-import android.view.View.OnClickListener;
+//import android.view.View.OnClickListener;
+
+import com.example.spaces.spaces.models.StudyLocation;
 
 /**
  * Created by Steven on 3/14/2018.

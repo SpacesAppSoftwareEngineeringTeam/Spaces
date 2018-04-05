@@ -13,4 +13,10 @@
     <string name="add_space_title">Add a new study space:</string>
     <string name="add_space_name_hint">"Name (e.g. \"Sears Lobby\")</string>
     <string name="add_space_imagecount">Pictures Added: 0</string>
+
+    <string name="title_sign_in">Welcome</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="hint_password">password</string>
+    <string name="hint_email">email</string>
+    <string name="sign_in">Sign In</string>
 </resources>

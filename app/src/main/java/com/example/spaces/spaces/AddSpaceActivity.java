@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,24 +14,40 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
  * Created on 4/1/18.
  */
 
-public class AddSpaceActivity extends Activity {
+public class AddSpaceActivity extends BaseActivity {
 
+    private static final String TAG = "Spaces#AddSpaceActivity";
+    private static final int GET_FROM_GALLERY = 3;
     private final long MAX_IMAGE_BYTES = 10000000;
-    private int imageCount = 0;
-    EditText name;
-    ImageButton addImageButton;
-    Button submitButton;
 
-    // request codes
-    public static final int GET_FROM_GALLERY = 3;
+    private int pictureCount = 0;
+    private ArrayList<Bitmap> pictures = new ArrayList<>();
+    private EditText name;
+    private ImageButton addImageButton;
+    private Button submitButton;
+
+    // [START declare_storage_ref]
+    private StorageReference mStorageRef;
+    // [END declare_storage_ref]
+    // [START declare_database_ref]
+    private DatabaseReference mDatabase;
+    // [END declare_database_ref]
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +56,13 @@ public class AddSpaceActivity extends Activity {
         name = findViewById(R.id.add_space_name);
         addImageButton = findViewById(R.id.add_space_add_photos);
         submitButton = findViewById(R.id.add_space_submit);
+
+        // [START get_storage_ref]
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        // [END get_storage_ref]
+        // [START initialize_database_ref]
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // [END initialize_database_ref]
 
         addImageButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -51,17 +75,33 @@ public class AddSpaceActivity extends Activity {
 
         submitButton.setOnClickListener(new View.OnClickListener() {
            public void onClick(View v) {
+               String locationName = name.getText().toString();
                // check if the space info added is valid
-               String result = verifyName(name.getText().toString());
+               String result = verifyName(locationName);
                if (result.startsWith("ERROR")) {
                    // display error message
-                   Toast.makeText(AddSpaceActivity.this, result.substring("ERROR:".length()), Toast.LENGTH_LONG).show();
+                   Toast.makeText(AddSpaceActivity.this,
+                           result.substring("ERROR:".length()), Toast.LENGTH_LONG).show();
                }
                else {
-                   //@TODO store the images with Cloud Firestore.
-                   //@TODO add image references and space title to database
+                   // create new StudyLocation
+                   StudyLocation location = new StudyLocation(locationName);
 
-                   //return user to main screen
+                   for (Bitmap pic : pictures) {
+                       Uri uri = ImageUploader.getImageUri(v.getContext(), pic);
+                       if (uri != null) {
+                           // add image to the StudyLocation
+                           location.addPicture(uri);
+                           // upload image to firebase cloud storage
+                           ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
+
+                           Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
+                       }
+                   }
+                   // submit new location to database
+                   mDatabase.child("locations").child(locationName).setValue(location);
+
+                   // return to main screen
                    finish();
                }
            }
@@ -71,22 +111,21 @@ public class AddSpaceActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Request to get images from the gallery detected
+        // get image from gallery
         if (resultCode == Activity.RESULT_OK && requestCode == GET_FROM_GALLERY) {
             Uri selectedImage = data.getData();
-            Bitmap image = null;
+            Bitmap image;
             try {
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 int minSize = image.getByteCount();
                 if (minSize > MAX_IMAGE_BYTES) {
-                    //@TODO downsize image (low priority feature)
+                    //@TODO downsize image (low priority)
                 }
-                // increment number of images uploaded, to be displayed to the user
-                imageCount++;
-                String str = getResources().getString(R.string.add_space_imagecount);
+                pictures.add(image);
+                pictureCount++;
                 // update formatted string to display new number of images uploaded
-                String newString = str.replace(str.charAt(str.length()-1), (char)(imageCount+'0'));
+                String str = getResources().getString(R.string.add_space_imagecount);
+                String newString = str.replace(str.charAt(str.length()-1), (char)(pictureCount +'0'));
                 ((TextView)findViewById(R.id.add_space_imagecount_text)).setText(newString);
 
             } catch (FileNotFoundException e) {

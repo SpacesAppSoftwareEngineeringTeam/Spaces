@@ -12,4 +12,6 @@
     <color name="textDefault">#808080</color>
     <color name="backgroundDefault">#FAFAFA</color>
     <color name="pureWhite">#FFFFFF</color>
+
+    <color name="ic_launcher_background">#6D9EEB</color>
 </resources>

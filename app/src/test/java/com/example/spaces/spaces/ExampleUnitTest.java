@@ -1,5 +1,9 @@
 package com.example.spaces.spaces;
 
+import com.example.spaces.spaces.models.StudyLocation;
+import com.example.spaces.spaces.models.User;
+import com.example.spaces.spaces.models.Review;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -33,7 +37,7 @@ public class ExampleUnitTest {
 
     @Test
     public void valid_friend_list() {
-        User u = new User("testUser");
+        User u = new User("testUser", "testUser@test.edu");
         for (String friend : u.getFriendList()) {
             assertFalse("user should not be on their own friend list", friend.equals(u.getUserID()));
         }
@@ -41,7 +45,7 @@ public class ExampleUnitTest {
 
     @Test
     public void add_review_averages_update(){
-        Review r = new Review("testLocation", "testUserID", new Date());
+        Review r = new Review("testLocation", "testUserID", new Date().toString());
         r.setOverall(1);
         r.setBusiness(1);
         r.setQuietness(1);
@@ -65,7 +69,7 @@ public class ExampleUnitTest {
 
     @Test
     public void add_multiple_reviews_averages_update(){
-        Review r1 = new Review("testLocation", "testUserID", new Date());
+        Review r1 = new Review("testLocation", "testUserID", new Date().toString());
         r1.setOverall(1);
         r1.setBusiness(1);
         r1.setQuietness(1);
@@ -74,7 +78,7 @@ public class ExampleUnitTest {
         r1.setWhiteboards(1);
         r1.setSeating(1);
 
-        Review r2 = new Review("testLocation", "testUserID", new Date());
+        Review r2 = new Review("testLocation", "testUserID", new Date().toString());
         r2.setOverall(2);
         r2.setBusiness(2);
         r2.setQuietness(2);
