@@ -29,6 +29,26 @@ public class User {
     }
 
     @Exclude
+    public String getUsername() {
+        return username;
+    }
+
+    @Exclude
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Exclude
+    public String getEmail() {
+        return email;
+    }
+
+    @Exclude
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Exclude
     public String getUserID() {
         return userID;
     }
