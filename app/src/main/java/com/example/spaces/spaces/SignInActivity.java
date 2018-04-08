@@ -27,6 +27,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private FirebaseAuth mAuth;
 
     private EditText mEmailField;
+    private EditText mNameField;
     private EditText mPasswordField;
     private Button mSignInButton;
     private Button mSignUpButton;
@@ -41,6 +42,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         // Views
         mEmailField = findViewById(R.id.field_email);
+        mNameField = findViewById(R.id.field_name);
         mPasswordField = findViewById(R.id.field_password);
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
@@ -62,7 +64,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private void signIn() {
         Log.d(TAG, "signIn");
-        if (!validateForm()) {
+        if (!validateSignInForm()) {
             return;
         }
 
@@ -89,12 +91,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private void signUp() {
         Log.d(TAG, "signUp");
-        if (!validateForm()) {
+        if (!validateSignUpForm()) {
+
             return;
         }
 
         showProgressDialog();
         String email = mEmailField.getText().toString();
+        String name = mNameField.getText().toString();
         String password = mPasswordField.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -133,7 +137,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private boolean validateForm() {
+    private boolean validateSignInForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
             mEmailField.setError("Required");
@@ -141,6 +145,21 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         } else {
             mEmailField.setError(null);
         }
+
+        if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
+            mPasswordField.setError("Required");
+            result = false;
+        } else {
+            mPasswordField.setError(null);
+        }
+
+        return result;
+    }
+
+    private boolean validateSignUpForm() {
+        boolean result = true;
+
+
 
         if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
             mPasswordField.setError("Required");
