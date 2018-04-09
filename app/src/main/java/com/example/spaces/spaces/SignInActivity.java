@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.spaces.spaces.models.User;
@@ -27,6 +28,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     private FirebaseAuth mAuth;
 
     private EditText mEmailField;
+    private EditText mNameField;
     private EditText mPasswordField;
     private Button mSignInButton;
     private Button mSignUpButton;
@@ -41,6 +43,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         // Views
         mEmailField = findViewById(R.id.field_email);
+        mNameField = findViewById(R.id.field_name);
         mPasswordField = findViewById(R.id.field_password);
         mSignInButton = findViewById(R.id.button_sign_in);
         mSignUpButton = findViewById(R.id.button_sign_up);
@@ -62,7 +65,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private void signIn() {
         Log.d(TAG, "signIn");
-        if (!validateForm()) {
+        if (!validateSignInForm()) {
             return;
         }
 
@@ -89,12 +92,13 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
     private void signUp() {
         Log.d(TAG, "signUp");
-        if (!validateForm()) {
+        if (!validateSignUpForm()) {
             return;
         }
 
         showProgressDialog("Loading...");
         String email = mEmailField.getText().toString();
+        final String name = mNameField.getText().toString();
         String password = mPasswordField.getText().toString();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -105,7 +109,20 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         hideProgressDialog();
 
                         if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
+                            FirebaseUser user = task.getResult().getUser();
+                            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .build();
+                            user.updateProfile(profileUpdate)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User profile updated.");
+                                            }
+                                        }
+                                    });
+                            onAuthSuccess(user);
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -115,8 +132,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        String username = usernameFromEmail(user.getEmail());
-
+        //String username = usernameFromEmail(user.getEmail());
+        String username = user.getDisplayName();
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail());
 
@@ -133,13 +150,44 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    private boolean validateForm() {
+    private boolean validateSignInForm() {
         boolean result = true;
         if (TextUtils.isEmpty(mEmailField.getText().toString())) {
             mEmailField.setError("Required");
             result = false;
         } else {
             mEmailField.setError(null);
+        }
+
+        if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
+            mPasswordField.setError("Required");
+            result = false;
+        } else {
+            mPasswordField.setError(null);
+        }
+
+        return result;
+    }
+
+    private boolean validateSignUpForm() {
+        boolean result = true;
+        if(mNameField.getVisibility() == View.GONE){
+            mNameField.setVisibility(View.VISIBLE);
+            return false;
+        }
+
+        if (TextUtils.isEmpty(mEmailField.getText().toString())) {
+            mEmailField.setError("Required");
+            result = false;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        if (TextUtils.isEmpty(mNameField.getText().toString())) {
+            mNameField.setError("Required");
+            result = false;
+        } else {
+            mNameField.setError(null);
         }
 
         if (TextUtils.isEmpty(mPasswordField.getText().toString())) {
