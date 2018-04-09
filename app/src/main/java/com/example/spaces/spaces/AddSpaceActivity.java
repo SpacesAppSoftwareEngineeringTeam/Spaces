@@ -125,7 +125,7 @@ public class AddSpaceActivity extends BaseActivity {
                 pictureCount++;
                 // update formatted string to display new number of images uploaded
                 String str = getResources().getString(R.string.add_space_imagecount);
-                String newString = str.replace(str.charAt(str.length()-1), (char)(pictureCount +'0'));
+                String newString = str.replace(str.charAt(str.length()-1), (char)('0'+pictureCount));
                 ((TextView)findViewById(R.id.add_space_imagecount_text)).setText(newString);
 
             } catch (FileNotFoundException e) {
