@@ -1,6 +1,8 @@
 package com.example.spaces.spaces;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -14,15 +16,28 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
@@ -74,78 +89,115 @@ public class AddSpaceActivity extends BaseActivity {
         });
 
         submitButton.setOnClickListener(new View.OnClickListener() {
-           public void onClick(View v) {
-               String locationName = name.getText().toString();
-               // check if the space info added is valid
-               String result = verifyName(locationName);
-               if (result.startsWith("ERROR")) {
-                   // display error message
-                   Toast.makeText(AddSpaceActivity.this,
-                           result.substring("ERROR:".length()), Toast.LENGTH_LONG).show();
-               }
-               else {
-                   // create new StudyLocation
-                   StudyLocation location = new StudyLocation(locationName);
-
-                   for (Bitmap pic : pictures) {
-                       Uri uri = ImageUploader.getImageUri(v.getContext(), pic);
-                       if (uri != null) {
-                           // add image to the StudyLocation
-                           location.addPicture(uri);
-                           // upload image to firebase cloud storage
-                           ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
-
-                           Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
-                       }
-                   }
-                   // submit new location to database
-                   mDatabase.child("locations").child(locationName).setValue(location);
-
-                   // return to main screen
-                   finish();
-               }
-           }
+            public void onClick(View v) {
+                submit(v);
+            }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // get image from gallery
-        if (resultCode == Activity.RESULT_OK && requestCode == GET_FROM_GALLERY) {
-            Uri selectedImage = data.getData();
-            Bitmap image;
-            try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                int minSize = image.getByteCount();
-                if (minSize > MAX_IMAGE_BYTES) {
-                    //@TODO downsize image (low priority)
-                }
-                pictures.add(image);
-                pictureCount++;
-                // update formatted string to display new number of images uploaded
-                String str = getResources().getString(R.string.add_space_imagecount);
-                String newString = str.replace(str.charAt(str.length()-1), (char)('0'+pictureCount));
-                ((TextView)findViewById(R.id.add_space_imagecount_text)).setText(newString);
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        // button to get image from gallery was clicked
+        if (resultCode == Activity.RESULT_OK && requestCode == GET_FROM_GALLERY) {
+            final Uri selectedImage = data.getData();
+            // ask for storage permissions to upload an image
+            Dexter.withActivity(this)
+                    .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .withListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                            Log.d(TAG, "storage permission: denied");
+                        }
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            token.continuePermissionRequest();
+                        }
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            Log.d(TAG, "storage permission: granted");
+
+                            Bitmap image;
+                            try {
+                                // copy image from gallery
+                                image = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                                int minSize = image.getByteCount();
+                                if (minSize > MAX_IMAGE_BYTES) {
+                                    //@TODO downsize image (low priority)
+                                }
+                                pictures.add(image);
+                                pictureCount++;
+                                // update formatted string to display new number of images uploaded
+                                String str = getResources().getString(R.string.add_space_imagecount);
+                                String newString = str.replace(str.charAt(str.length()-1), (char)('0'+pictureCount));
+                                ((TextView) findViewById(R.id.add_space_imagecount_text)).setText(newString);
+
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    })
+                    .withErrorListener(new PermissionRequestErrorListener() {
+                        @Override
+                        public void onError(DexterError error) {
+                            Log.d(TAG, "Error getting image from gallery: " + error.toString());
+                        }
+
+                    }).check();
         }
     }
 
-    private String verifyName(String name) {
-        if (name == null || name.equals("")) {
-            return "ERROR: Enter a name";
+    public void submit(final View v) {
+        final String locationName = name.getText().toString();
+
+        if (locationName.equals("")) {
+            Toast.makeText(AddSpaceActivity.this,
+                    "Enter a name", Toast.LENGTH_LONG).show();
         }
         else if (name.length() > 50) {
-            return "ERROR: The name must be under 50 characters";
+            Toast.makeText(AddSpaceActivity.this,
+                    "The name must be under 50 characters", Toast.LENGTH_LONG).show();
         }
-
         else {
-            return "Success";
+            final DatabaseReference locations = mDatabase.child("locations");
+
+            locations.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    if (snapshot.child(locationName).exists()) {
+                        // location already exists
+                        Toast.makeText(AddSpaceActivity.this, "A location with that name already exists", Toast.LENGTH_LONG).show();
+                    }
+
+                    else {
+                        StudyLocation location = new StudyLocation(locationName);
+                        for (Bitmap pic : pictures) {
+                            Uri uri = ImageUploader.getImageUri(v.getContext(), pic);
+                            if (uri != null) {
+                                // add image to the StudyLocation
+                                location.addPicture(uri.toString());
+                                // upload image to firebase cloud storage
+                                ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
+                                Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
+                            }
+                        }
+                        // add new location to database
+                        locations.child(locationName).setValue(location);
+
+                        // return to main screen
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError de) {
+                    de.toException().printStackTrace();
+                }
+            });
         }
     }
+
 }
