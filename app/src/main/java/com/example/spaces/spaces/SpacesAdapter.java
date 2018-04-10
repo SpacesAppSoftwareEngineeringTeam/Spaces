@@ -41,6 +41,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     // @TODO Open the space page for the appropriate location
+
                 }
             });
         }
