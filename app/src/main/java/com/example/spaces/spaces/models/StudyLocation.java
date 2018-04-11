@@ -42,11 +42,6 @@ public class StudyLocation {
     }
 
     @Exclude
-    public void setPictures(ArrayList<String> pictureIds) {
-        this.pictureIds = pictureIds;
-    }
-
-    @Exclude
     public void addPicture(String pictureIdString){
         pictureIds.add(pictureIdString);
     }
@@ -54,6 +49,11 @@ public class StudyLocation {
     @Exclude
     public void addPicture(Uri pictureId){
         pictureIds.add(pictureId.toString());
+    }
+
+    @Exclude
+    public void addPictures(ArrayList<String> pictureIds) {
+        this.pictureIds.addAll(pictureIds);
     }
 
     @Exclude
