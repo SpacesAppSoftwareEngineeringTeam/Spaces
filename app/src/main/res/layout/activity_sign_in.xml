@@ -46,7 +46,7 @@
             android:inputType="textPersonName"
             android:maxLines="1"
             android:textAlignment="center"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/field_password"
