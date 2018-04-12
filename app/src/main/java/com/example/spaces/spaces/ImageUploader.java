@@ -1,6 +1,7 @@
 package com.example.spaces.spaces;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -13,15 +14,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.security.Permissions;
 
 
 /**
  * Created on 4/8/18.
  */
 
-public class ImageUploader {
+class ImageUploader {
 
-    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+    static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "image", null);
@@ -29,7 +31,7 @@ public class ImageUploader {
     }
 
     // [START upload_from_uri]
-    public static void uploadFromUri(final Uri fileUri, final String tag, StorageReference storageRef) {
+    static void uploadFromUri(final Uri fileUri, final String tag, StorageReference storageRef) {
         Log.d(tag, "uploadFromUri:src:" + fileUri.toString());
 
         // [START get_child_ref]
@@ -59,4 +61,7 @@ public class ImageUploader {
                 });
     }
     // [END upload_from_uri]
+
+
+
 }
