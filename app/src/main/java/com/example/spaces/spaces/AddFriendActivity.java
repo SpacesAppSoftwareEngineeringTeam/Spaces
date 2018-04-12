@@ -65,7 +65,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
     public boolean userWithEmailExists(String email){
         final DatabaseReference users = mDatabase.child("users");
-        return true;
+        return email.contains("@case.edu");
         //TODO:
         /*users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
