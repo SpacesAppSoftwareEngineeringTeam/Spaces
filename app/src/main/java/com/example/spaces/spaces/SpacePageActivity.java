@@ -55,9 +55,11 @@ public class SpacePageActivity extends BaseActivity {
     private RatingBar comfortStars;
 
     // General constructor
-    public SpacePageActivity(StudyLocation location) {
+    public SpacePageActivity() {
         super();
-        this.location = location;
+        // Test class
+        // @TODO enable ability to pull specific class data based on click listener (may involve creating a custom onClickListener class)
+        location = new StudyLocation();
     }
 
     @Override
