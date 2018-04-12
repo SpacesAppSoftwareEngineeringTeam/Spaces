@@ -1,5 +1,6 @@
 package com.example.spaces.spaces;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.TextView;
 import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.graphics.Color;
-//import android.view.View.OnClickListener;
 
 import com.example.spaces.spaces.models.StudyLocation;
 
@@ -23,11 +23,12 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         public CardView mCardView;       // Containing card for space
         public TextView SpaceName;       // Space name
         public ImageView SpaceImage;     // Space thumbnail
         public TextView SpaceRating;     // Overall space rating
+        public StudyLocation currentLocation;
 
         public ViewHolder(View v) {
             super(v);
@@ -41,7 +42,8 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     // @TODO Open the space page for the appropriate location
-
+                    Intent i = new Intent(v.getContext(), SpacePageActivity.class);
+                    v.getContext().startActivity(i);
                 }
             });
         }
@@ -99,6 +101,13 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
             RatingColor = Color.GREEN;   // 4+ rating is green
         holder.SpaceRating.setTextSize(18);
         holder.SpaceRating.setTextColor(RatingColor);
+
+        // Determine the current page for responding to card selections
+        setCurrentLocation(mDataset[position], holder);
+    }
+
+    private void setCurrentLocation(StudyLocation l, ViewHolder h) {
+        h.currentLocation = l;
     }
 
     // Return the size of your dataset (invoked by the layout manager)
