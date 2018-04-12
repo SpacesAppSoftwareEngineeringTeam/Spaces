@@ -79,7 +79,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
-
                         if (task.isSuccessful()) {
                             onAuthSuccess(task.getResult().getUser());
                         } else {
@@ -124,6 +123,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                     });
                             onAuthSuccess(user);
                         } else {
+                            Log.d(TAG, "createUser failed",task.getException());
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
