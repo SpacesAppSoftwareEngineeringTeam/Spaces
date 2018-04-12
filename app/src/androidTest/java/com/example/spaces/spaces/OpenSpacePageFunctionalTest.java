@@ -66,7 +66,7 @@ public class OpenSpacePageFunctionalTest {
 
     @Test
     public void testThumbnailsDisplay() {
-        
+
     }
 
     private Activity getCurrentActivity() {

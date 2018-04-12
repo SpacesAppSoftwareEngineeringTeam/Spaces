@@ -42,7 +42,8 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     // @TODO Open the space page for the appropriate location
-                    new SpacePageActivity(currentLocation);
+                    Intent i = new Intent(v.getContext(), SpacePageActivity.class);
+                    v.getContext().startActivity(i);
                 }
             });
         }
