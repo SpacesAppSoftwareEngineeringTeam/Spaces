@@ -28,8 +28,8 @@
 
         <EditText
             android:id="@+id/field_email"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center_horizontal"
             android:hint="@string/hint_email"
@@ -41,16 +41,16 @@
             android:id="@+id/field_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hint_name"
             android:inputType="textPersonName"
+            android:maxLines="1"
             android:textAlignment="center"
             android:visibility="gone" />
 
         <EditText
             android:id="@+id/field_password"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center_horizontal"

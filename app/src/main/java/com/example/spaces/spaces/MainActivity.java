@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +25,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "MainActivity";
 
     private RecyclerView mainRecyclerView;
     private RecyclerView.Adapter mainRecyclerAdapter;
@@ -82,15 +85,17 @@ public class MainActivity extends AppCompatActivity
 
         // Check auth on Activity start
         if (mAuth.getCurrentUser() != null) {
-            //updateUI(mAuth.getCurrentUser());
+            updateUI(mAuth.getCurrentUser());
         }
     }
 
     public void updateUI(FirebaseUser currentUser){
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navView = drawer.findViewById(R.id.nav_view);
-        TextView drawerNameField = navView.findViewById(R.id.drawerNameTextView);
-        TextView drawerEmailField = navView.findViewById(R.id.drawerEmailTextView);
+        View headerLayout = navView.getHeaderView(0);
+        TextView drawerNameField = headerLayout.findViewById(R.id.drawerNameTextView);
+        TextView drawerEmailField = headerLayout.findViewById(R.id.drawerEmailTextView);
+        
         drawerNameField.setText(currentUser.getDisplayName());
         drawerEmailField.setText(currentUser.getEmail());
     }
