@@ -24,7 +24,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public CardView mCardView;       // Containing card for space
+        public CardView mCardView;       // Containing card for friend
         public TextView mFriendNameView;
         public TextView mFriendLocationView;
 
@@ -33,14 +33,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             mCardView = v.findViewById(R.id.friendCardView);
             mFriendNameView = v.findViewById(R.id.friendNameText);
             mFriendLocationView = v.findViewById(R.id.friendLocationText);
-
-            // Select an individual space and retrieve the space page
-            mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // @TODO Open the space page for the appropriate location
-                }
-            });
         }
 
     }
@@ -56,7 +48,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                                                        int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.spaces_cardview_item, parent, false);
+                .inflate(R.layout.friend_cardview_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }

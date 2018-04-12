@@ -14,8 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Random;
 
@@ -25,10 +28,14 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mainRecyclerView;
     private RecyclerView.Adapter mainRecyclerAdapter;
     private RecyclerView.LayoutManager mainRecyclerLayoutManager;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAuth = FirebaseAuth.getInstance();
+
         setContentView(R.layout.activity_nav_drawer);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -70,6 +77,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Check auth on Activity start
+        if (mAuth.getCurrentUser() != null) {
+            //updateUI(mAuth.getCurrentUser());
+        }
+    }
+
+    public void updateUI(FirebaseUser currentUser){
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navView = drawer.findViewById(R.id.nav_view);
+        TextView drawerNameField = navView.findViewById(R.id.drawerNameTextView);
+        TextView drawerEmailField = navView.findViewById(R.id.drawerEmailTextView);
+        drawerNameField.setText(currentUser.getDisplayName());
+        drawerEmailField.setText(currentUser.getEmail());
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -88,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_share_spot) {
 
         } else if (id == R.id.nav_locate_friends) {
-
+            start(FriendListActivity.class);
         } else if (id == R.id.nav_add_friends) {
 
         } else if (id == R.id.nav_outlets) {

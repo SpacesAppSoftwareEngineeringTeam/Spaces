@@ -21,7 +21,7 @@ public class FriendListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_list);
 
-        mainRecyclerView = findViewById(R.id.spaceList);
+        mainRecyclerView = findViewById(R.id.friendList);
 
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
@@ -30,7 +30,7 @@ public class FriendListActivity extends AppCompatActivity {
         User[] testFriendData = new User[10];
         Random r = new Random();
         for (int i = 0; i < testFriendData.length; i++) {
-            testFriendData[i] = new User("User " + i, "User" + i + "@case.edu");
+            testFriendData[i] = new User("Friend " + i, "Friend" + i + "@case.edu");
         }
 
         mainRecyclerAdapter = new FriendListAdapter(testFriendData);
