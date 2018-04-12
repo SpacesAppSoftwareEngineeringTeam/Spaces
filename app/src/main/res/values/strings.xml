@@ -20,4 +20,5 @@
     <string name="hint_email">email</string>
     <string name="sign_in">Sign In</string>
     <string name="hint_name">name</string>
+    <string name="add_friend_email_hint">"Enter your friend's email"</string>
 </resources>

@@ -1,9 +1,12 @@
 package com.example.spaces.spaces;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.example.spaces.spaces.models.StudyLocation;
 import com.example.spaces.spaces.models.User;
@@ -35,5 +38,19 @@ public class FriendListActivity extends AppCompatActivity {
 
         mainRecyclerAdapter = new FriendListAdapter(testFriendData);
         mainRecyclerView.setAdapter(mainRecyclerAdapter);
+
+        // Setup add space FAB
+        FloatingActionButton fab = findViewById(R.id.friend_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start(AddFriendActivity.class);
+            }
+        });
+    }
+
+    //starts a typical activity
+    private void start(Class c) {
+        startActivity(new Intent(this, c));
     }
 }

@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity
         View headerLayout = navView.getHeaderView(0);
         TextView drawerNameField = headerLayout.findViewById(R.id.drawerNameTextView);
         TextView drawerEmailField = headerLayout.findViewById(R.id.drawerEmailTextView);
-        
+
         drawerNameField.setText(currentUser.getDisplayName());
         drawerEmailField.setText(currentUser.getEmail());
     }
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_locate_friends) {
             start(FriendListActivity.class);
         } else if (id == R.id.nav_add_friends) {
-
+            start(AddFriendActivity.class);
         } else if (id == R.id.nav_outlets) {
 
         } else if (id == R.id.nav_whiteboards) {
