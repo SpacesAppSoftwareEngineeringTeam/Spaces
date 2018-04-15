@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
 
+        // Launch activity for displaying list of all spaces in the database
+
         // Test location array
         StudyLocation[] testSpacesData = new StudyLocation[10];
         Random r = new Random();

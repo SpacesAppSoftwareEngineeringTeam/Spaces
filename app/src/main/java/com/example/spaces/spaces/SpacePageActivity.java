@@ -21,7 +21,7 @@ import android.graphics.Color;
 public class SpacePageActivity extends BaseActivity {
 
     // Location structure for the view
-    private StudyLocation location;
+    private static StudyLocation location;
 
     // General space information
     private TextView spaceName;
@@ -59,7 +59,12 @@ public class SpacePageActivity extends BaseActivity {
         super();
         // Test class
         // @TODO enable ability to pull specific class data based on click listener (may involve creating a custom onClickListener class)
-        location = new StudyLocation();
+       // location = new StudyLocation();
+    }
+
+    // public method accessed by SpacesAdapter for determining which space page to load
+    public static void setSpaceForActivity(StudyLocation location) {
+        SpacePageActivity.location = location;
     }
 
     @Override

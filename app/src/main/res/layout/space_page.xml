@@ -1,273 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/spaceName"
-        android:layout_width="344dp"
-        android:layout_height="46dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/photosCard"
-        android:layout_width="368dp"
-        android:layout_height="126dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toTopOf="@id/reviewsCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/utilityCard">
+    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/photosTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Photos"
-            android:textSize="18sp" />
+            android:id="@+id/spaceName"
+            android:layout_width="344dp"
+            android:layout_height="46dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/thumb1"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="40dp"
-            app:srcCompat="@drawable/header_nav_drawer_background" />
+        <android.support.v7.widget.CardView
+            android:id="@+id/photosCard"
+            android:layout_width="368dp"
+            android:layout_height="126dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toTopOf="@id/reviewsCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/utilityCard">
 
-        <ImageView
-            android:id="@+id/thumb2"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="40dp"
-            app:srcCompat="@drawable/header_nav_drawer_background" />
+            <TextView
+                android:id="@+id/photosTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Photos"
+                android:textSize="18sp" />
 
-        <ImageView
-            android:id="@+id/thumb3"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="190dp"
-            android:layout_marginTop="40dp"
-            app:srcCompat="@drawable/header_nav_drawer_background" />
+            <ImageView
+                android:id="@+id/thumb1"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="40dp"
+                app:srcCompat="@drawable/header_nav_drawer_background" />
 
-        <ImageButton
-            android:id="@+id/seeMorePhotos"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="280dp"
-            android:layout_marginTop="40dp"
-            app:srcCompat="@drawable/ic_menu_gallery" />
+            <ImageView
+                android:id="@+id/thumb2"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="40dp"
+                app:srcCompat="@drawable/header_nav_drawer_background" />
 
-    </android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/thumb3"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="190dp"
+                android:layout_marginTop="40dp"
+                app:srcCompat="@drawable/header_nav_drawer_background" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/reviewsCard"
-        android:layout_width="368dp"
-        android:layout_height="361dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/photosCard">
+            <ImageButton
+                android:id="@+id/seeMorePhotos"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="280dp"
+                android:layout_marginTop="40dp"
+                app:srcCompat="@drawable/ic_menu_gallery" />
 
-        <TextView
-            android:id="@+id/reviewsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Reviews"
-            android:textSize="18sp" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/reviewsCard"
+            android:layout_width="368dp"
+            android:layout_height="361dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/photosCard">
+
+            <TextView
+                android:id="@+id/reviewsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Reviews"
+                android:textSize="18sp" />
 
 
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/ratingsCard"
-        android:layout_width="368dp"
-        android:layout_height="298dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/photosCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spaceName"
-        app:layout_constraintVertical_bias="0.045">
+        <android.support.v7.widget.CardView
+            android:id="@+id/ratingsCard"
+            android:layout_width="368dp"
+            android:layout_height="298dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/photosCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spaceName"
+            app:layout_constraintVertical_bias="0.045">
 
-        <TextView
-            android:id="@+id/ratingsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Ratings"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/ratingsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Ratings"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/overallTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="65dp"
-            android:text="Overall rating" />
+            <TextView
+                android:id="@+id/overallTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="65dp"
+                android:text="Overall rating" />
 
-        <TextView
-            android:id="@+id/quietnessTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="125dp"
-            android:text="Quietness" />
+            <TextView
+                android:id="@+id/quietnessTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="125dp"
+                android:text="Quietness" />
 
-        <TextView
-            android:id="@+id/busynessTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="185dp"
-            android:text="Busyness" />
+            <TextView
+                android:id="@+id/busynessTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="185dp"
+                android:text="Busyness" />
 
-        <TextView
-            android:id="@+id/comfortTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="245dp"
-            android:text="Comfort" />
+            <TextView
+                android:id="@+id/comfortTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="245dp"
+                android:text="Comfort" />
 
-        <TextView
-            android:id="@+id/overallValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="50dp" />
+            <TextView
+                android:id="@+id/overallValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="300dp"
+                android:layout_marginTop="50dp" />
 
-        <TextView
-            android:id="@+id/quietnessValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="50dp" />
+            <TextView
+                android:id="@+id/quietnessValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="300dp"
+                android:layout_marginTop="50dp" />
 
-        <TextView
-            android:id="@+id/busynessValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="50dp" />
+            <TextView
+                android:id="@+id/busynessValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="300dp"
+                android:layout_marginTop="50dp" />
 
-        <TextView
-            android:id="@+id/comfortValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="300dp"
-            android:layout_marginTop="50dp" />
+            <TextView
+                android:id="@+id/comfortValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="300dp"
+                android:layout_marginTop="50dp" />
 
-        <RatingBar
-            android:id="@+id/overallStars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="50dp"
-            android:numStars="4" />
+            <RatingBar
+                android:id="@+id/overallStars"
+                android:layout_width="239dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="50dp"
+                android:clickable="false"
+                android:numStars="4" />
 
-        <RatingBar
-            android:id="@+id/quietnessStars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="110dp"
-            android:numStars="2"/>
+            <RatingBar
+                android:id="@+id/quietnessStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="110dp" />
 
-        <RatingBar
-            android:id="@+id/busynessStars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="170dp"
-            android:numStars="1"/>
+            <RatingBar
+                android:id="@+id/busynessStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="170dp" />
 
-        <RatingBar
-            android:id="@+id/comfortStars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="230dp"
-            android:numStars="5" />
+            <RatingBar
+                android:id="@+id/comfortStars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="230dp" />
 
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/utilityCard"
-        android:layout_width="368dp"
-        android:layout_height="171dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/photosCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingsCard"
-        app:layout_constraintVertical_bias="0.0">
+        <android.support.v7.widget.CardView
+            android:id="@+id/utilityCard"
+            android:layout_width="368dp"
+            android:layout_height="171dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/photosCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ratingsCard"
+            app:layout_constraintVertical_bias="0.0">
 
-        <TextView
-            android:id="@+id/utilityTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="Utilities"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/utilityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Utilities"
+                android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/whiteboardsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="50dp"
-            android:text="Whiteboards" />
+            <TextView
+                android:id="@+id/whiteboardsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="50dp"
+                android:text="Whiteboards" />
 
-        <TextView
-            android:id="@+id/seatingTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="130dp"
-            android:text="Seating" />
+            <TextView
+                android:id="@+id/seatingTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="130dp"
+                android:text="Seating" />
 
-        <TextView
-            android:id="@+id/outletsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="90dp"
-            android:text="Outlets" />
+            <TextView
+                android:id="@+id/outletsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="90dp"
+                android:text="Outlets" />
 
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>
