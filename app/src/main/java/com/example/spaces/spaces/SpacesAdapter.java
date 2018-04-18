@@ -1,6 +1,7 @@
 package com.example.spaces.spaces;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +42,11 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
             mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // @TODO Open the space page for the appropriate location
-                    SpacePageActivity.setSpaceForActivity(currentLocation);
                     Intent i = new Intent(v.getContext(), SpacePageActivity.class);
-                    v.getContext().startActivity(i);
+                    // open the space page for the location in this viewholder
+                    v.getContext().startActivity(
+                            i.putExtra("name", SpaceName.getText().toString())
+                    );
                 }
             });
         }

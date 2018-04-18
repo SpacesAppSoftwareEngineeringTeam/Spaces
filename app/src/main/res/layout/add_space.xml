@@ -16,8 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/add_space_title"
-            android:textSize="12pt"
-            />
+            android:textSize="12pt" />
         <EditText
             android:id="@+id/add_space_name"
             android:layout_width="wrap_content"
@@ -37,18 +36,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/add_space_imagecount"
-            />
+            android:text="@string/add_space_image_text" />
+        <TextView
+            android:id="@+id/add_space_imagecount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/add_space_imagecount" />
         <Button
             android:id="@+id/add_space_submit"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="60dp"
             android:background="@color/colorPrimary"
             android:textColor="@color/pureWhite"
-            android:text="Submit"
-            />
+            android:text="Submit" />
 
     </LinearLayout>
 </ScrollView>

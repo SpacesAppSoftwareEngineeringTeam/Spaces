@@ -1,38 +1,30 @@
 package com.example.spaces.spaces;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class AddFriendActivity extends AppCompatActivity {
+public class AddFriendActivity extends BaseActivity {
 
     private static final String TAG = "Spaces#AddFriendActivity";
     private EditText email;
     private Button submitButton;
     private FirebaseAuth mAuth;
-
     private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_friend);
+        setContentView(R.layout.add_friend);
 
         mAuth = FirebaseAuth.getInstance();
 

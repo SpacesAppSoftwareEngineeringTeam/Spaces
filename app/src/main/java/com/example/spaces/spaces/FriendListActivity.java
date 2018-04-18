@@ -8,12 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.example.spaces.spaces.models.StudyLocation;
 import com.example.spaces.spaces.models.User;
 
 import java.util.Random;
 
-public class FriendListActivity extends AppCompatActivity {
+public class FriendListActivity extends BaseActivity {
 
     private RecyclerView mainRecyclerView;
     private RecyclerView.Adapter mainRecyclerAdapter;
@@ -22,7 +21,7 @@ public class FriendListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_list);
+        setContentView(R.layout.friend_list);
 
         mainRecyclerView = findViewById(R.id.friendList);
 
@@ -39,7 +38,7 @@ public class FriendListActivity extends AppCompatActivity {
         mainRecyclerAdapter = new FriendListAdapter(testFriendData);
         mainRecyclerView.setAdapter(mainRecyclerAdapter);
 
-        // Setup add space FAB
+        // Setup add friend FAB
         FloatingActionButton fab = findViewById(R.id.friend_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +48,4 @@ public class FriendListActivity extends AppCompatActivity {
         });
     }
 
-    //starts a typical activity
-    private void start(Class c) {
-        startActivity(new Intent(this, c));
-    }
 }

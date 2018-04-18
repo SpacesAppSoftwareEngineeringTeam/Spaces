@@ -2,29 +2,34 @@ package com.example.spaces.spaces.models;
 
 import android.net.Uri;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Steven on 3/25/2018.
  */
 
 @IgnoreExtraProperties
-public class StudyLocation {
+public class StudyLocation implements Serializable {
 
     // Firebase requires model classes to have public fields
-    public String locationName;
+    public String locationName = "";
     public ArrayList<String> pictureIds = new ArrayList<>();
     public double overallReviewAvg = 0;
     public double quietnessAvg = 0;
-    public double businessAvg = 0;
+    public double busynessAvg = 0;
     public double comfortAvg = 0;
     public double whiteboardAvg = 0;
     public double outletAvg = 0;
-    public double seatingAvg = 0;
-    public ArrayList<Review> reviews = new ArrayList<>();
+    public double computerAvg = 0;
+    public Map<String, Object> reviews = new HashMap<>();
     public boolean accessibilityFlag = false;
 
     public StudyLocation() {
@@ -77,13 +82,13 @@ public class StudyLocation {
     }
 
     @Exclude
-    public double getBusinessAvg() {
-        return businessAvg;
+    public double getBusynessAvg() {
+        return busynessAvg;
     }
 
     @Exclude
-    public void setBusinessAvg(double businessAvg) {
-        this.businessAvg = businessAvg;
+    public void setBusynessAvg(double busynessAvg) {
+        this.busynessAvg = busynessAvg;
     }
 
     @Exclude
@@ -117,36 +122,49 @@ public class StudyLocation {
     }
 
     @Exclude
-    public double getSeatingAvg() {
-        return seatingAvg;
+    public double getComputerAvg() {
+        return computerAvg;
     }
 
     @Exclude
-    public void setSeatingAvg(double seatingAvg) {
-        this.seatingAvg = seatingAvg;
+    public void setComputerAvg(double computerAvg) {
+        this.computerAvg = computerAvg;
     }
 
     @Exclude
-    public ArrayList<Review> getReviews() {
+    public Map<String, Object> getReviews() {
         return reviews;
     }
 
     @Exclude
-    public void setReviews(ArrayList<Review> reviews) {
+    public void setReviews(Map<String, Object> reviews) {
         this.reviews = reviews;
     }
 
     @Exclude
-    public void addReview(Review review){
-        reviews.add(review);
+    public void addReview(DatabaseReference dref, Review review){
         int size = reviews.size();
+
         setOverallReviewAvg(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
         setQuietnessAvg(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
-        setBusinessAvg(calcNewAvg(getBusinessAvg(), size, review.getBusiness()));
+        setBusynessAvg(calcNewAvg(getBusynessAvg(), size, review.getBusyness()));
         setComfortAvg(calcNewAvg(getComfortAvg(), size, review.getComfort()));
-        setWhiteboardAvg(calcNewAvg(getWhiteboardAvg(), size, review.getWhiteboards()));
-        setOutletAvg(calcNewAvg(getOutletAvg(), size, review.getOutlets()));
-        setSeatingAvg(calcNewAvg(getSeatingAvg(), size, review.getSeating()));
+
+        int hasWhiteboards = (review.getWhiteboards()) ? 1 : 0;
+        int hasOutlets = (review.getOutlets()) ? 1 : 0;
+        int hasComputers = (review.getComputers()) ? 1 : 0;
+        setWhiteboardAvg(calcNewAvg(getWhiteboardAvg(), size, hasWhiteboards));
+        setOutletAvg(calcNewAvg(getOutletAvg(), size, hasOutlets));
+        setComputerAvg(calcNewAvg(getComputerAvg(), size, hasComputers));
+
+        reviews.put(dref.toString(), review);
+    }
+
+    @Exclude
+    public void addReview(Review review){
+        DatabaseReference dref = FirebaseDatabase.getInstance().getReference().
+                child("locations").child(locationName).child("reviews").push();
+        addReview(dref, review);
     }
 
     @Exclude
@@ -171,7 +189,7 @@ public class StudyLocation {
 
 
     @Exclude
-    private double calcNewAvg(double oldAvg, int numReviews, int newReviewScore){
+    private double calcNewAvg(double oldAvg, int numReviews, float newReviewScore){
         return (oldAvg * (numReviews - 1)/ numReviews) + (newReviewScore / numReviews);
     }
 
