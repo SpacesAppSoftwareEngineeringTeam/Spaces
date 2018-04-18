@@ -17,14 +17,17 @@ import java.io.ByteArrayOutputStream;
 import java.security.Permissions;
 
 
+
+import android.util.Log;
 /**
- * Created on 4/8/18.
+ * Created by Owen on 4/8/18.
  */
 
 class ImageUploader {
 
     static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "image", null);
         return Uri.parse(path);

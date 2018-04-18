@@ -12,7 +12,8 @@
 
     <string name="add_space_title">Add a new study space:</string>
     <string name="add_space_name_hint">"Name (e.g. \"Sears Lobby\")</string>
-    <string name="add_space_imagecount">Pictures Added: 0</string>
+    <string name="add_space_image_text">Pictures Added:</string>
+    <string name="add_space_imagecount"> 0</string>
 
     <string name="title_sign_in">Welcome</string>
     <string name="sign_up">Sign Up</string>
@@ -21,4 +22,11 @@
     <string name="sign_in">Sign In</string>
     <string name="hint_name">name</string>
     <string name="add_friend_email_hint">"Enter your friend's email"</string>
+
+    <string name="add_review_title">Review this location:</string>
+    <string name="review_text_hint">Start typing your review&#8230;</string>
+    <string name="review_ratings_hint">On a scale from 1 to 5\nthis study space is&#8230;</string>
+    <string name="review_utilities_hint">This study space has&#8230;</string>
+    <string name="add_review_imagecount"> 0</string>
+
 </resources>

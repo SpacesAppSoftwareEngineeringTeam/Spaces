@@ -1,8 +1,19 @@
 package com.example.spaces.spaces;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,18 +24,21 @@ import android.widget.ImageView;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.graphics.Color;
+import android.widget.Toast;
 
 /**
  * Created by Matt on 4/11/2018.
  */
 
 public class SpacePageActivity extends BaseActivity {
+    private static final String TAG = "Spaces#SpacePageActivit";
 
     // Location structure for the view
-    private static StudyLocation location;
+    //private static StudyLocation location;
 
     // General space information
-    private TextView spaceName;
+    private String locationName;
+    private TextView nameTextView;
 
     // Space photos layout information
     private CardView photosCard;
@@ -53,27 +67,72 @@ public class SpacePageActivity extends BaseActivity {
     private RatingBar quietnessStars;
     private RatingBar busynessStars;
     private RatingBar comfortStars;
+    // [START declare_storage_ref]
+    private StorageReference mStorageRef;
+    // [END declare_storage_ref]
+    // [START declare_database_ref]
+    private DatabaseReference mDatabase;
+    // [END declare_database_ref]
+
 
     // General constructor
     public SpacePageActivity() {
         super();
-        // Test class
-        // @TODO enable ability to pull specific class data based on click listener (may involve creating a custom onClickListener class)
-       // location = new StudyLocation();
-    }
-
-    // public method accessed by SpacesAdapter for determining which space page to load
-    public static void setSpaceForActivity(StudyLocation location) {
-        SpacePageActivity.location = location;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.space_page);
+        setViews();
+        // [START get_storage_ref]
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        // [END get_storage_ref]
+        // [START initialize_database_ref]
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // [END initialize_database_ref]
 
-        // Set the associated values for the page
-        spaceName = findViewById(R.id.spaceName);
+        // get the location name passed to this activity on creation
+        Bundle b = getIntent().getExtras();
+        if (b != null) locationName = b.getString("name");
+
+        final DatabaseReference locations = mDatabase.child("locations");
+        locations.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (!snapshot.child(locationName).exists()) {
+                    // location doesn't exist
+                    Log.d(TAG, "No location with the name "+locationName+" exists");
+                }
+                else {
+                    // pull the location info from the database
+                    StudyLocation location = (StudyLocation)snapshot.child(locationName).getValue();
+                    // populate the space page with info on this location
+                    specifyViewInfo(location);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError de) {
+                de.toException().printStackTrace();
+            }
+        });
+
+    }
+
+    private void specifyViewInfo(StudyLocation location) {
+        nameTextView.setText(location.getLocationName());
+        overallValue.setText(Double.toString(location.getOverallReviewAvg()));
+        quietnessValue.setText(Double.toString(location.getQuietnessAvg()));
+        busynessValue.setText(Double.toString(location.getBusynessAvg()));
+        comfortValue.setText(Double.toString(location.getComfortAvg()));
+        overallStars.setNumStars((int)location.getOverallReviewAvg());
+        quietnessStars.setNumStars((int)location.getQuietnessAvg());
+        busynessStars.setNumStars((int)location.getBusynessAvg());
+        comfortStars.setNumStars((int)location.getComfortAvg());
+    }
+
+    private void setViews() {
+        nameTextView = findViewById(R.id.spaceName);
         photosCard = findViewById(R.id.photosCard);
         photosTitle = findViewById(R.id.photosTitle);
         thumb1 = findViewById(R.id.thumb1);
@@ -96,21 +155,6 @@ public class SpacePageActivity extends BaseActivity {
         quietnessStars = findViewById(R.id.quietnessStars);
         busynessStars = findViewById(R.id.busynessStars);
         comfortStars = findViewById(R.id.comfortStars);
-
-        // Set the specific contents of each view based on the location
-        specifyViewInfo();
-    }
-
-    private void specifyViewInfo() {
-        spaceName.setText(location.getLocationName());
-        overallValue.setText(Double.toString(location.getOverallReviewAvg()));
-        quietnessValue.setText(Double.toString(location.getQuietnessAvg()));
-        busynessValue.setText(Double.toString(location.getBusinessAvg()));
-        comfortValue.setText(Double.toString(location.getComfortAvg()));
-        overallStars.setNumStars((int)location.getOverallReviewAvg());
-        quietnessStars.setNumStars((int)location.getQuietnessAvg());
-        busynessStars.setNumStars((int)location.getBusinessAvg());
-        comfortStars.setNumStars((int)location.getComfortAvg());
     }
 
 }

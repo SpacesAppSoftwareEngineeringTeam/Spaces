@@ -3,7 +3,7 @@ package com.example.spaces.spaces.models;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.Date;
+import java.io.Serializable;
 
 
 /**
@@ -11,40 +11,53 @@ import java.util.Date;
  */
 
 @IgnoreExtraProperties
-public class Review {
+public class Review implements Serializable {
 
     // Firebase requires model classes to have public fields
-    public String locationID = "";
-    public String userID = "";
-    public String submissionDate;
-    public int overall = 0;
-    public int quietness = 0;
-    public int business = 0;
-    public int comfort = 0;
-    public int whiteboards = 0;
-    public int outlets = 0;
-    public int seating = 0;
+    public String locationName = "";
     public String comment = "";
+    public String userID = "";
+    public String submissionDate = "";
+    public float overall = 0;
+    public float quietness = 0;
+    public float busyness = 0;
+    public float comfort = 0;
+    public boolean whiteboards;
+    public boolean outlets;
+    public boolean computers;
     public String accessibilityComment = "";
 
     public Review() {
         // Default constructor required for calls to DataSnapshot.getValue(Review.class)
     }
 
-    public Review(String locationID, String userID, String submissionDate) {
-        this.locationID = locationID;
+    public Review(String locationName, String userID, String submissionDate) {
+        this.locationName = locationName;
         this.userID = userID;
         this.submissionDate = submissionDate;
     }
 
-    @Exclude
-    public String getLocationID() {
-        return locationID;
+    public Review(String locationName, String comment, float quietness, float busyness,
+                  float comfort, boolean whiteboards, boolean outlets, boolean computers, String date) {
+        this.locationName = locationName;
+        this.comment = comment;
+        this.quietness = quietness;
+        this.busyness = busyness;
+        this.comfort = comfort;
+        this.whiteboards = whiteboards;
+        this.outlets = outlets;
+        this.computers = computers;
+        this.submissionDate = date;
     }
 
     @Exclude
-    public void setLocationID(String locationID) {
-        this.locationID = locationID;
+    public String getLocationName() {
+        return locationName;
+    }
+
+    @Exclude
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 
     @Exclude
@@ -68,73 +81,73 @@ public class Review {
     }
 
     @Exclude
-    public int getOverall() {
+    public float getOverall() {
         return overall;
     }
 
     @Exclude
-    public void setOverall(int overall) {
+    public void setOverall(float overall) {
         this.overall = overall;
     }
 
     @Exclude
-    public int getQuietness() {
+    public float getQuietness() {
         return quietness;
     }
 
     @Exclude
-    public void setQuietness(int quietness) {
+    public void setQuietness(float quietness) {
         this.quietness = quietness;
     }
 
     @Exclude
-    public int getBusiness() {
-        return business;
+    public float getBusyness() {
+        return busyness;
     }
 
     @Exclude
-    public void setBusiness(int business) {
-        this.business = business;
+    public void setBusyness(float busyness) {
+        this.busyness = busyness;
     }
 
     @Exclude
-    public int getComfort() {
+    public float getComfort() {
         return comfort;
     }
 
     @Exclude
-    public void setComfort(int comfort) {
+    public void setComfort(float comfort) {
         this.comfort = comfort;
     }
 
     @Exclude
-    public int getWhiteboards() {
+    public boolean getWhiteboards() {
         return whiteboards;
     }
 
     @Exclude
-    public void setWhiteboards(int whiteboards) {
+    public void setWhiteboards(boolean whiteboards) {
         this.whiteboards = whiteboards;
     }
 
     @Exclude
-    public int getOutlets() {
+    public boolean getOutlets() {
         return outlets;
     }
 
     @Exclude
-    public void setOutlets(int outlets) {
+    public void setOutlets(boolean outlets) {
         this.outlets = outlets;
     }
 
     @Exclude
-    public int getSeating() {
-        return seating;
+    public boolean getComputers() {
+        return computers;
     }
 
     @Exclude
-    public void setSeating(int seating) {
-        this.seating = seating;
+    public void setComputers(boolean computers) {
+        this.computers= computers;
     }
 
     @Exclude

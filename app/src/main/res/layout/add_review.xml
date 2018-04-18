@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_review_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/add_review_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/add_review_title"
+            android:textSize="12pt"
+            android:textColor="@color/titleText"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/add_typed_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_utilities"
+            app:layout_constraintVertical_bias="0.0">
+            <EditText
+                android:id="@+id/review_textbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="top|start"
+                android:hint="@string/review_text_hint"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:maxLines="10"
+                android:minLines="6">
+            </EditText>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/review_ratings_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/photosCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_review_title_text"
+            app:layout_constraintVertical_bias="0.045">
+            <TextView
+                android:id="@+id/review_ratings_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/review_ratings_hint"
+                android:maxLines="2"
+                android:singleLine="false"
+                android:textSize="9pt" />
+            <TextView
+                android:id="@+id/review_quietness_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:layout_marginLeft="10dp"
+                android:text="Quiet" />
+            <TextView
+                android:id="@+id/review_busyness_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:layout_marginLeft="10dp"
+                android:text="Not busy" />
+            <TextView
+                android:id="@+id/review_comfort_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="210dp"
+                android:layout_marginLeft="10dp"
+                android:text="Comfortable" />
+            <RatingBar
+                android:id="@+id/review_quietness_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginTop="75dp"
+                android:clickable="true" />
+            <RatingBar
+                android:id="@+id/review_busyness_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginTop="135dp" />
+            <RatingBar
+                android:id="@+id/review_comfort_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginTop="195dp" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/review_utilities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_ratings_card"
+            app:layout_constraintVertical_bias="0.0">
+            <TextView
+                android:id="@+id/review_utilities_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/review_utilities_hint"
+                android:textSize="9pt" />
+            <TextView
+                android:id="@+id/review_whiteboards_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:text="Whiteboards" />
+            <CheckBox
+                android:id="@+id/review_whiteboard_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="75dp" />
+            <TextView
+                android:id="@+id/review_outlets_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="50dp"
+                android:text="Outlets" />
+            <CheckBox
+                android:id="@+id/review_outlet_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="135dp"
+                android:layout_marginTop="75dp" />
+            <TextView
+                android:id="@+id/review_computers_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="210dp"
+                android:layout_marginTop="50dp"
+                android:text="Computers" />
+            <CheckBox
+                android:id="@+id/review_computers_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="230dp"
+                android:layout_marginTop="75dp" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/add_typed_review">
+            <TextView
+                android:id="@+id/review_imagecount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="30dp"
+                android:text="Pictures added:"
+                android:textSize="10pt"/>
+            <TextView
+                android:id="@+id/review_imagecount_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="60dp"
+                android:layout_marginLeft="80dp"
+                android:text="@string/add_review_imagecount"
+                android:textSize="10pt"/>
+            <ImageButton
+                android:id="@+id/review_add_photos_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_gravity="end"
+                android:src="@mipmap/ic_add_photos_color"
+                android:background="@color/transparent"/>
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:id="@+id/review_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center|bottom"
+            android:layout_marginTop="50dp"
+            android:background="@color/colorPrimary"
+            android:text="Submit"
+            android:textColor="@color/pureWhite" />
+
+    </LinearLayout>
+</ScrollView>

@@ -10,8 +10,10 @@
     <color name="colorAccent">#FF8742</color>
 
     <color name="textDefault">#808080</color>
+    <color name="titleText">#141112</color>
     <color name="backgroundDefault">#FAFAFA</color>
     <color name="pureWhite">#FFFFFF</color>
+    <color name="transparent">#FFFFFFFF</color>
 
     <color name="ic_launcher_background">#6D9EEB</color>
 </resources>

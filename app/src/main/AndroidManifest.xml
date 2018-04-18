@@ -28,8 +28,8 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".FriendListActivity" />
         <activity android:name=".SpacePageActivity" />
-        <activity android:name=".FriendListActivity" />
-        <activity android:name=".AddFriendActivity"></activity>
+        <activity android:name=".AddFriendActivity" />
+        <activity android:name=".ReviewActivity" />
     </application>
 
 </manifest>
