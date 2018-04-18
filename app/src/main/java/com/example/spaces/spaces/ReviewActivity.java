@@ -119,6 +119,7 @@ public class ReviewActivity extends BaseActivity {
                             +"\n   whiteboards="+whiteboardsBox.isChecked()+", outlets="+outletsBox.isChecked()+", computers="+computersBox.isChecked()
                             +"\n   date="+Calendar.getInstance().getTime().toString());
 
+
                     // create a review from the current entries
                     Review review = new Review(
                             locationName, reviewText.getText().toString(),
