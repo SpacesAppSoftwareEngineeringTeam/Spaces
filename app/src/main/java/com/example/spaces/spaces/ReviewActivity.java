@@ -64,7 +64,6 @@ public class ReviewActivity extends BaseActivity {
         addImageButton = findViewById(R.id.review_add_photos_button);
         submitButton = findViewById(R.id.review_submit);
 
-        //mAuth = FirebaseAuth.getInstance();
         // [START get_storage_ref]
         mStorageRef = FirebaseStorage.getInstance().getReference();
         // [END get_storage_ref]
@@ -147,9 +146,7 @@ public class ReviewActivity extends BaseActivity {
                     finish();
                 }
                 else {
-                    throw new RuntimeException(
-                            "attempted to submit a review of a location that doesn't exist: "+locationName
-                    );
+                    throw new RuntimeException("attempted to submit a review of a location that doesn't exist: "+locationName);
                 }
 
             }

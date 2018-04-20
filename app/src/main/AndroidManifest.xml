@@ -29,7 +29,8 @@
         <activity android:name=".FriendListActivity" />
         <activity android:name=".SpacePageActivity" />
         <activity android:name=".AddFriendActivity" />
-        <activity android:name=".SelectLocationActivity" />
+        <activity android:name=".SelectLocationActivity"
+            android:noHistory="true"/>
         <activity android:name=".ReviewActivity" />
     </application>
 
