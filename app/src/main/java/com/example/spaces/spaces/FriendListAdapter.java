@@ -1,8 +1,6 @@
 package com.example.spaces.spaces;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

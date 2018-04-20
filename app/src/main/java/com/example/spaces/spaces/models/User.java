@@ -14,8 +14,6 @@ public class User {
 
     // Firebase requires model classes to have public fields
     public String userID = "";
-    public ArrayList<String> friendList = new ArrayList<String>();
-    public ArrayList<String> friendRequestList = new ArrayList<String>();
     public String locationID = "";
     public String username;
     public String email;
@@ -57,46 +55,6 @@ public class User {
     @Exclude
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-
-    @Exclude
-    public ArrayList<String> getFriendList() {
-        return friendList;
-    }
-
-    @Exclude
-    public void setFriendList(ArrayList<String> friendList) {
-        this.friendList = friendList;
-    }
-
-    @Exclude
-    public void addFriend(String friend) {
-        friendList.add(friend);
-    }
-
-    @Exclude
-    public boolean removeFriend(String friend) {
-        return friendList.remove(friend);
-    }
-
-    @Exclude
-    public ArrayList<String> getFriendRequestList() {
-        return friendRequestList;
-    }
-
-    @Exclude
-    public void setFriendRequestList(ArrayList<String> friendRequestList) {
-        this.friendRequestList = friendRequestList;
-    }
-
-    @Exclude
-    public void addRequestFriend(String friendRequest) {
-        friendRequestList.add(friendRequest);
-    }
-
-    @Exclude
-    public boolean removeRequestFriend(String friendRequest) {
-        return friendRequestList.remove(friendRequest);
     }
 
     @Exclude

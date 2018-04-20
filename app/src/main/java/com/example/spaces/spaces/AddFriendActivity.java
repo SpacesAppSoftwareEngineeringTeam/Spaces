@@ -24,7 +24,6 @@ public class AddFriendActivity extends BaseActivity {
     private EditText email;
     private Button submitButton;
     private FirebaseAuth mAuth;
-    private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
 
     @Override
@@ -32,12 +31,12 @@ public class AddFriendActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_friend);
 
-        mAuth = FirebaseAuth.getInstance();
+
 
         email = findViewById(R.id.addFriendEmailText);
         submitButton = findViewById(R.id.submitFriendRequest);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         submitButton.setOnClickListener(new View.OnClickListener() {
