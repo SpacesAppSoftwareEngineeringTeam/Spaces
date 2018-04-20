@@ -9,7 +9,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/friendCardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center">
 
         <LinearLayout
@@ -34,25 +34,25 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/friendAcceptButton"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_green_dark"
                 android:text="Accept"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/friendRemoveButton"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/holo_red_dark"
                 android:text="Remove"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>

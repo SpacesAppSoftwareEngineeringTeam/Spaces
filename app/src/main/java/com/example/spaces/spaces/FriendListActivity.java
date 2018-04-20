@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.example.spaces.spaces.models.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class FriendListActivity extends BaseActivity {
@@ -36,13 +38,13 @@ public class FriendListActivity extends BaseActivity {
             testFriendData[i].setLocationID("Testlocation");
         }
 
-        User[] testFriendRequestData = new User[2];
+        User[] testFriendRequestData = new User[10];
         for (int i = 0; i < testFriendRequestData.length; i++) {
             testFriendRequestData[i] = new User("Request " + i, "Friend" + i + "@case.edu");
             testFriendRequestData[i].setLocationID("Testlocation");
         }
 
-        mainRecyclerAdapter = new FriendListAdapter(testFriendData,testFriendRequestData);
+        mainRecyclerAdapter = new FriendListAdapter(new ArrayList<User>(Arrays.asList(testFriendData)),new ArrayList<User>(Arrays.asList(testFriendRequestData)));
         mainRecyclerView.setAdapter(mainRecyclerAdapter);
 
         // Setup add friend FAB

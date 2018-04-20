@@ -1,5 +1,6 @@
 package com.example.spaces.spaces;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.opengl.Visibility;
 import android.support.v7.widget.CardView;
@@ -15,6 +16,8 @@ import com.example.spaces.spaces.models.User;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 /**
  * Created by Steven on 4/8/2018.
  */
@@ -23,13 +26,13 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     private static final String TAG = "FriendListAdapter";
 
-    private User[] mFriendsDataset;
-    private User[] mFriendRequestsDataset;
+    private ArrayList<User> mFriendsDataset;
+    private ArrayList<User> mFriendRequestsDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public CardView mCardView;       // Containing card for friend
         public TextView mFriendNameView;
         public TextView mFriendLocationView;
@@ -43,12 +46,28 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             mFriendLocationView = v.findViewById(R.id.friendLocationText);
             mFriendAcceptButton = v.findViewById(R.id.friendAcceptButton);
             mFriendRemoveButton = v.findViewById(R.id.friendRemoveButton);
+
+            mFriendAcceptButton.setOnClickListener(this);
+            mFriendRemoveButton.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+
+            if(v.equals(mFriendAcceptButton)) {
+                acceptUserAtPosition(getAdapterPosition());
+            } else if(v.equals(mFriendRemoveButton)) {
+                removeUserAtPosition(getAdapterPosition());
+            }
+
+        }
+
+
 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FriendListAdapter(User[] myFriendsDataset, User[] myFriendRequestsDataset) {
+    public FriendListAdapter(ArrayList<User> myFriendsDataset, ArrayList<User> myFriendRequestsDataset) {
         mFriendsDataset = myFriendsDataset;
         mFriendRequestsDataset = myFriendRequestsDataset;
 
@@ -76,7 +95,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         holder.mFriendNameView.setText(user.getUsername());
         holder.mFriendNameView.setTextSize(24);
 
-        if(position < mFriendRequestsDataset.length){
+        if(position < mFriendRequestsDataset.size()){
             holder.mCardView.setCardBackgroundColor(Color.LTGRAY);
 
             holder.mFriendLocationView.setVisibility(View.GONE);
@@ -98,19 +117,52 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mFriendRequestsDataset.length + mFriendsDataset.length ;
+        return mFriendRequestsDataset.size() + mFriendsDataset.size() ;
     }
 
     public User getUserFromPosition(int position){
         if(position < 0 || position > getItemCount()){
             Log.d(TAG,"Position is out of range");
         }
-        if(position < mFriendRequestsDataset.length){
-            return mFriendRequestsDataset[position];
+        if(position < mFriendRequestsDataset.size()){
+            return mFriendRequestsDataset.get(position);
         }
         else{
-            int adjustedPosition = position - mFriendRequestsDataset.length;
-            return mFriendsDataset[adjustedPosition];
+            int adjustedPosition = position - mFriendRequestsDataset.size();
+            return mFriendsDataset.get(adjustedPosition);
         }
     }
+
+    public void removeUserAtPosition(int position){
+        if(position < 0 || position > getItemCount()){
+            Log.d(TAG,"Position is out of range");
+        }
+        if(position < mFriendRequestsDataset.size()){
+            mFriendRequestsDataset.remove(position);
+        }
+        else{
+            int adjustedPosition = position - mFriendRequestsDataset.size();
+            mFriendsDataset.remove(adjustedPosition);
+        }
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, getItemCount());
+    }
+
+    public void acceptUserAtPosition(int position){
+        if(position < 0 || position > getItemCount()){
+            Log.d(TAG,"Position is out of range");
+        }
+        if(position < mFriendRequestsDataset.size()){
+            User user = mFriendRequestsDataset.remove(position);
+            mFriendsDataset.add(user);
+            notifyItemRemoved(position);
+            notifyItemInserted(getItemCount() - 1);
+            notifyItemRangeChanged(position, getItemCount());
+        }
+        else{
+            Log.d(TAG,"attempting to hit accept on an existing friend!");
+        }
+    }
+
+
 }
