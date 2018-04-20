@@ -38,6 +38,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         public TextView mFriendLocationView;
         public Button mFriendAcceptButton;
         public Button mFriendRemoveButton;
+        private boolean hasBeenLongClicked = false;
 
         public ViewHolder(View v) {
             super(v);
@@ -47,6 +48,24 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             mFriendAcceptButton = v.findViewById(R.id.friendAcceptButton);
             mFriendRemoveButton = v.findViewById(R.id.friendRemoveButton);
 
+            mCardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if(getAdapterPosition() >= mFriendRequestsDataset.size()){
+                        if(!hasBeenLongClicked){
+                            mFriendLocationView.setVisibility(View.GONE);
+                            mFriendRemoveButton.setVisibility(View.VISIBLE);
+                            hasBeenLongClicked = true;
+                        }
+                        else{
+                            hasBeenLongClicked = false;
+                            mFriendLocationView.setVisibility(View.VISIBLE);
+                            mFriendRemoveButton.setVisibility(View.GONE);
+                        }
+                    }
+                    return false;
+                }
+            });
             mFriendAcceptButton.setOnClickListener(this);
             mFriendRemoveButton.setOnClickListener(this);
         }
@@ -61,9 +80,6 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             }
 
         }
-
-
-
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
