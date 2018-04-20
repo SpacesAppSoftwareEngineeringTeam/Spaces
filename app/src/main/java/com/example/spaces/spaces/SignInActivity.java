@@ -59,7 +59,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         // Check auth on Activity start
         if (mAuth.getCurrentUser() != null) {
-            onAuthSuccess(mAuth.getCurrentUser());
+            onAuthSuccess(mAuth.getCurrentUser(), mAuth.getCurrentUser().getDisplayName());
         }
     }
 
@@ -80,7 +80,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
                         hideProgressDialog();
                         if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
+                            FirebaseUser user = task.getResult().getUser();
+                            onAuthSuccess(user, user.getDisplayName());
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign In Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -121,7 +122,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                             }
                                         }
                                     });
-                            onAuthSuccess(user);
+                            onAuthSuccess(user, name);
                         } else {
                             Log.d(TAG, "createUser failed",task.getException());
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
@@ -131,12 +132,10 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
-    private void onAuthSuccess(FirebaseUser user) {
-        //String username = usernameFromEmail(user.getEmail());
-        String username = user.getDisplayName();
+    private void onAuthSuccess(FirebaseUser user, String name) {
+        String username = name;
         // Write new user
         writeNewUser(user.getUid(), username, user.getEmail());
-
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();

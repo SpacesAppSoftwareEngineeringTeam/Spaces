@@ -33,9 +33,16 @@ public class FriendListActivity extends BaseActivity {
         Random r = new Random();
         for (int i = 0; i < testFriendData.length; i++) {
             testFriendData[i] = new User("Friend " + i, "Friend" + i + "@case.edu");
+            testFriendData[i].setLocationID("Testlocation");
         }
 
-        mainRecyclerAdapter = new FriendListAdapter(testFriendData);
+        User[] testFriendRequestData = new User[2];
+        for (int i = 0; i < testFriendRequestData.length; i++) {
+            testFriendRequestData[i] = new User("Request " + i, "Friend" + i + "@case.edu");
+            testFriendRequestData[i].setLocationID("Testlocation");
+        }
+
+        mainRecyclerAdapter = new FriendListAdapter(testFriendData,testFriendRequestData);
         mainRecyclerView.setAdapter(mainRecyclerAdapter);
 
         // Setup add friend FAB
