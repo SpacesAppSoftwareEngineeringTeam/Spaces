@@ -86,7 +86,10 @@ public class FriendListActivity extends BaseActivity {
             Log.d(TAG, "Friend UID:" + friendUID);
             String displayName = dataSnapshot.child(friendUID).child("username").getValue(String.class);
             String email = dataSnapshot.child(friendUID).child("email").getValue(String.class);
-            friends.add(new User(displayName, email));
+            User newUser = new User(displayName, email);
+            newUser.setUserID(friendUID);
+            friends.add(newUser);
+
         }
         return friends;
     }
@@ -98,7 +101,9 @@ public class FriendListActivity extends BaseActivity {
             Log.d(TAG, "Friend Request UID:" + requestUID);
             String displayName = dataSnapshot.child(requestUID).child("username").getValue(String.class);
             String email = dataSnapshot.child(requestUID).child("email").getValue(String.class);
-            requests.add(new User(displayName, email));
+            User newUser = new User(displayName, email);
+            newUser.setUserID(requestUID);
+            requests.add(newUser);
         }
         return requests;
     }

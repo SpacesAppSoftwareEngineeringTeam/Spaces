@@ -11,6 +11,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.spaces.spaces.models.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -26,6 +32,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
     private ArrayList<User> mFriendsDataset;
     private ArrayList<User> mFriendRequestsDataset;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -85,6 +94,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         mFriendsDataset = myFriendsDataset;
         mFriendRequestsDataset = myFriendRequestsDataset;
 
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     // Create new views (invoked by the layout manager)
@@ -151,15 +162,39 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         if(position < 0 || position > getItemCount()){
             Log.d(TAG,"Position is out of range");
         }
-        if(position < mFriendRequestsDataset.size()){
-            mFriendRequestsDataset.remove(position);
+        else {
+            User removedUser;
+            String removedUserUID;
+            String listPath;
+            if(position < mFriendRequestsDataset.size()) {
+                removedUser = mFriendRequestsDataset.remove(position);
+                removedUserUID = removedUser.getUserID();
+                listPath = "friendRequestList";
+            }
+            else {
+                position = position - mFriendRequestsDataset.size();
+                removedUser = mFriendsDataset.remove(position);
+                removedUserUID = removedUser.getUserID();
+                listPath = "friendList";
+            }
+
+            String currentUserUID = mAuth.getCurrentUser().getUid();
+            DatabaseReference ref = mDatabase.child("users").child(currentUserUID).child(listPath);
+
+            ref.orderByValue().equalTo(removedUserUID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    dataSnapshot.getRef().removeValue();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, getItemCount());
         }
-        else{
-            int adjustedPosition = position - mFriendRequestsDataset.size();
-            mFriendsDataset.remove(adjustedPosition);
-        }
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, getItemCount());
+
     }
 
     public void acceptUserAtPosition(int position){
@@ -167,8 +202,25 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             Log.d(TAG,"Position is out of range");
         }
         if(position < mFriendRequestsDataset.size()){
-            User user = mFriendRequestsDataset.remove(position);
-            mFriendsDataset.add(user);
+            User friend = mFriendRequestsDataset.remove(position);
+            mFriendsDataset.add(friend);
+            final String friendUID = friend.getUserID();
+            final String currentUserUID = mAuth.getCurrentUser().getUid();
+            DatabaseReference requestRef = mDatabase.child("users").child(currentUserUID).child("friendRequestList");
+            requestRef.orderByValue().equalTo(friendUID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    dataSnapshot.getRef().removeValue();
+                    DatabaseReference friendListRef = mDatabase.child("users").child(currentUserUID).child("friendList").push();
+                    friendListRef.setValue(friendUID);
+                    DatabaseReference friendFriendListRef = mDatabase.child("users").child(friendUID).child("friendList").push();
+                    friendFriendListRef.setValue(currentUserUID);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
             notifyItemRemoved(position);
             notifyItemInserted(getItemCount() - 1);
             notifyItemRangeChanged(position, getItemCount());
