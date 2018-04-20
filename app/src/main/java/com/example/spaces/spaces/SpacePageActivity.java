@@ -1,5 +1,6 @@
 package com.example.spaces.spaces;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.graphics.Color;
 import android.widget.Toast;
+import android.support.design.widget.FloatingActionButton;
 
 /**
  * Created by Matt on 4/11/2018.
@@ -63,10 +68,6 @@ public class SpacePageActivity extends BaseActivity {
     private TextView quietnessValue;
     private TextView busynessValue;
     private TextView comfortValue;
-    private RatingBar overallStars;
-    private RatingBar quietnessStars;
-    private RatingBar busynessStars;
-    private RatingBar comfortStars;
     // [START declare_storage_ref]
     private StorageReference mStorageRef;
     // [END declare_storage_ref]
@@ -117,6 +118,28 @@ public class SpacePageActivity extends BaseActivity {
             }
         });
 
+        // Setup a Floating Action Button to launch add review activity (based on MainActivity implementation)
+        FloatingActionButton fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(view.getContext(), ReviewActivity.class);
+                // open the add review page for the location specified
+                view.getContext().startActivity(
+                        i.putExtra("name", locationName)
+                );
+            }
+        });
+
+        // Setup "see more photos" button
+        seeMorePhotos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                start(GalleryActivity.class);
+            }
+        });
+
     }
 
     private void specifyViewInfo(StudyLocation location) {
@@ -125,10 +148,6 @@ public class SpacePageActivity extends BaseActivity {
         quietnessValue.setText(Double.toString(location.getQuietnessAvg()));
         busynessValue.setText(Double.toString(location.getBusynessAvg()));
         comfortValue.setText(Double.toString(location.getComfortAvg()));
-        overallStars.setNumStars((int)location.getOverallReviewAvg());
-        quietnessStars.setNumStars((int)location.getQuietnessAvg());
-        busynessStars.setNumStars((int)location.getBusynessAvg());
-        comfortStars.setNumStars((int)location.getComfortAvg());
     }
 
     private void setViews() {
@@ -151,10 +170,6 @@ public class SpacePageActivity extends BaseActivity {
         quietnessValue = findViewById(R.id.quietnessValue);
         busynessValue = findViewById(R.id.busynessValue);
         comfortValue = findViewById(R.id.comfortValue);
-        overallStars = findViewById(R.id.overallStars);
-        quietnessStars = findViewById(R.id.quietnessStars);
-        busynessStars = findViewById(R.id.busynessStars);
-        comfortStars = findViewById(R.id.comfortStars);
     }
 
 }
