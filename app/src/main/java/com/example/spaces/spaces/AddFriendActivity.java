@@ -1,20 +1,26 @@
 package com.example.spaces.spaces;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.spaces.spaces.models.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class AddFriendActivity extends BaseActivity {
 
-    private static final String TAG = "Spaces#AddFriendActivity";
+    private static final String TAG = "AddFriendActivity";
     private EditText email;
     private Button submitButton;
     private FirebaseAuth mAuth;
@@ -43,51 +49,39 @@ public class AddFriendActivity extends BaseActivity {
 
     public void submit(final View v) {
         final String finalEmail = email.getText().toString();
-
         if (finalEmail.equals("")) {
             Toast.makeText(AddFriendActivity.this,
                     "Enter an email", Toast.LENGTH_LONG).show();
         }
-        else if (userWithEmailExists(finalEmail)) {
-            Toast.makeText(AddFriendActivity.this,
-                    "Friend Request Sent", Toast.LENGTH_LONG).show();
-            finish();
-        }
+        sendFriendRequestFromEmail(finalEmail);
     }
 
-    public boolean userWithEmailExists(String email){
+    public void sendFriendRequestFromEmail(String email){
         final DatabaseReference users = mDatabase.child("users");
-        return email.contains("@case.edu");
-        //TODO:
-        /*users.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = users.orderByChild("email").equalTo(email);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (!snapshot.child(email).) {
-                    // location already exists
-                    Toast.makeText(AddSpaceActivity.this, "A location with that name already exists", Toast.LENGTH_LONG).show();
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot user: dataSnapshot.getChildren()){
+                    String friendUID = user.getKey();
+                    String thisUserUID = mAuth.getCurrentUser().getUid();
+                    DatabaseReference friendRequestRef = users.child(friendUID).child("friendRequestList").push();
+                    friendRequestRef.setValue(thisUserUID);
 
-                else {
-                    StudyLocation location = new StudyLocation(locationName);
-                    for (Bitmap pic : pictures) {
-                        Uri uri = ImageUploader.getImageUri(v.getContext(), pic);
-                        if (uri != null) {
-                            // add image to the StudyLocation
-                            location.addPicture(uri.toString());
-                            // upload image to firebase cloud storage
-                            ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
-                            Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
-                        }
-                    }
-                    // add new location to database
-                    locations.child(locationName).setValue(location);
-
-                    // return to main screen
+                    Toast.makeText(AddFriendActivity.this,
+                            "Friend Request Sent", Toast.LENGTH_LONG).show();
                     finish();
                 }
+                //nothing in the dataSnapshot
+                Toast.makeText(AddFriendActivity.this,
+                        "Email isn't registered!", Toast.LENGTH_LONG).show();
             }
-        });*/
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
