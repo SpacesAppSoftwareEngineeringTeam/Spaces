@@ -30,23 +30,6 @@ public class FriendListActivity extends BaseActivity {
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
 
-        // Test location array
-        User[] testFriendData = new User[10];
-        Random r = new Random();
-        for (int i = 0; i < testFriendData.length; i++) {
-            testFriendData[i] = new User("Friend " + i, "Friend" + i + "@case.edu");
-            testFriendData[i].setLocationID("Testlocation");
-        }
-
-        User[] testFriendRequestData = new User[10];
-        for (int i = 0; i < testFriendRequestData.length; i++) {
-            testFriendRequestData[i] = new User("Request " + i, "Friend" + i + "@case.edu");
-            testFriendRequestData[i].setLocationID("Testlocation");
-        }
-
-        mainRecyclerAdapter = new FriendListAdapter(new ArrayList<User>(Arrays.asList(testFriendData)),new ArrayList<User>(Arrays.asList(testFriendRequestData)));
-        mainRecyclerView.setAdapter(mainRecyclerAdapter);
-
         // Setup add friend FAB
         FloatingActionButton fab = findViewById(R.id.friend_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,6 +38,19 @@ public class FriendListActivity extends BaseActivity {
                 start(AddFriendActivity.class);
             }
         });
+
+        setupFriendListDataset();
+
+
+
+    }
+
+    void setupFriendListDataset(){
+
+
+
+        mainRecyclerAdapter = new FriendListAdapter());
+        mainRecyclerView.setAdapter(mainRecyclerAdapter);
     }
 
 }
