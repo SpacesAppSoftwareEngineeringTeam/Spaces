@@ -75,6 +75,8 @@ public class ReviewActivity extends BaseActivity {
         // get the location name passed to this activity on creation
         Bundle b = getIntent().getExtras();
         if (b != null) locationName = b.getString("name");
+        // display the location name in the title
+        ((TextView) findViewById(R.id.add_review_title)).setText(locationName);
 
         // attach the action listeners
         addImageButton.setOnClickListener(new View.OnClickListener() {
