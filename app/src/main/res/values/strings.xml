@@ -23,7 +23,12 @@
     <string name="hint_name">name</string>
     <string name="add_friend_email_hint">"Enter your friend's email"</string>
 
-    <string name="add_review_title">Review this location:</string>
+    <string name="back_button_text">BACK</string>
+    <string name="review_button_text">REVIEW</string>
+    <string name="hint_select_location">Enter a location to review&#8230;</string>
+
+    <string name="add_review_title">Location Name Here</string>
+    <string name="review_location_name">this location</string>
     <string name="review_text_hint">Start typing your review&#8230;</string>
     <string name="review_ratings_hint">On a scale from 1 to 5\nthis study space is&#8230;</string>
     <string name="review_utilities_hint">This study space has&#8230;</string>

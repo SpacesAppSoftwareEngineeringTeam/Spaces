@@ -1,12 +1,9 @@
 package com.example.spaces.spaces;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +36,7 @@ public class AddSpaceActivity extends BaseActivity {
     private EditText name;
     private ImageButton addImageButton;
     private Button submitButton;
+    private String prefilledName;
     // [START declare_storage_ref]
     private StorageReference mStorageRef;
     // [END declare_storage_ref]
@@ -61,6 +59,12 @@ public class AddSpaceActivity extends BaseActivity {
         // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
+
+        // get the location name passed to this activity on creation, if any
+        Bundle b = getIntent().getExtras();
+        if (b != null) prefilledName = b.getString("name");
+        // prefill the given location name
+        ((TextView) findViewById(R.id.add_space_name)).setText(prefilledName);
 
         addImageButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -124,6 +128,13 @@ public class AddSpaceActivity extends BaseActivity {
                         }
                         // add new location to database
                         locations.child(locationName).setValue(location);
+
+                        // if this activity was launched by the SelectLocationActivity
+                        if (prefilledName != null) {
+                            // then proceed to the review page
+                            Intent i = new Intent(AddSpaceActivity.this, ReviewActivity.class);
+                            startActivity(i.putExtra("name", locationName));
+                        }
 
                         // return to main screen
                         finish();

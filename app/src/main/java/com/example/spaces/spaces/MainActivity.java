@@ -87,11 +87,13 @@ public class MainActivity extends BaseActivity
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
                 switch (actionItem.getId()) {
                     case R.id.new_review:
+                        /*
                         Intent i = new Intent(MainActivity.this, ReviewActivity.class);
-                        //@TODO allow user to select which location to review
                         i.putExtra("name", "Babs' office");
                         // start a review for the location specified
                         startActivity(i);
+                        */
+                        start(SelectLocationActivity.class);
                         // close the speed dial
                         return false;
                     case R.id.new_space:
