@@ -17,8 +17,10 @@ import java.io.ByteArrayOutputStream;
 import java.security.Permissions;
 
 
+
+import android.util.Log;
 /**
- * Created on 4/8/18.
+ * Created by Owen on 4/8/18.
  */
 
 class ImageUploader {

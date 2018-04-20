@@ -20,10 +20,13 @@ import android.widget.TextView;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
 
+        // Launch activity for displaying list of all spaces in the database
+
         // Test location array
         StudyLocation[] testSpacesData = new StudyLocation[10];
         Random r = new Random();
@@ -66,12 +71,36 @@ public class MainActivity extends AppCompatActivity
             testSpacesData[i].setOverallReviewAvg(5 * r.nextDouble());
         }
 
-        // Setup add space FAB
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // Setup a Floating Action Button to launch add space and review activities
+        SpeedDialView fab = findViewById(R.id.fab);
+        SpeedDialOverlayLayout fabOverlay = findViewById(R.id.overlay);
+        fab.setOverlayLayout(fabOverlay);
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.new_review, R.drawable.ic_edit)
+                .setLabel("Review a space")
+                .create());
+        fab.addActionItem(new SpeedDialActionItem.Builder(R.id.new_space, R.drawable.ic_space)
+                .setLabel("Add a new space")
+                .create());
+
+        fab.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
-            public void onClick(View view) {
-                start(AddSpaceActivity.class);
+            public boolean onActionSelected(SpeedDialActionItem actionItem) {
+                switch (actionItem.getId()) {
+                    case R.id.new_review:
+                        Intent i = new Intent(MainActivity.this, ReviewActivity.class);
+                        //@TODO allow user to select which location to review
+                        i.putExtra("name", "Babs' office");
+                        // start a review for the location specified
+                        startActivity(i);
+                        // close the speed dial
+                        return false;
+                    case R.id.new_space:
+                        // launch activity to create a new space
+                        start(AddSpaceActivity.class);
+                        return false;
+                    default:
+                        return false;
+                }
             }
         });
 
@@ -146,17 +175,12 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            return true;
+            //start(myActivity.class);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    //starts a typical activity
-    private void start(Class c) {
-        startActivity(new Intent(this, c));
-    }
+
 }
