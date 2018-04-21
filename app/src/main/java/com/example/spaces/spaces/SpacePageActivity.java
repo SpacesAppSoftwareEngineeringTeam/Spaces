@@ -107,7 +107,9 @@ public class SpacePageActivity extends BaseActivity {
                 }
                 else {
                     // pull the location info from the database
-                    StudyLocation location = (StudyLocation)snapshot.child(locationName).getValue();
+                    //StudyLocation location = (StudyLocation)snapshot.child(locationName).getValue();
+                    StudyLocation location = new StudyLocation(snapshot.child(locationName).child("locationName").getValue(String.class));
+                    assignLocationValues(location, snapshot);
                     // populate the space page with info on this location
                     specifyViewInfo(location);
                 }
@@ -140,6 +142,15 @@ public class SpacePageActivity extends BaseActivity {
             }
         });
 
+    }
+
+    //@TODO simplify database pulls and add exception handling for null values
+    // Assign location values from the database to a location object
+    private void assignLocationValues(StudyLocation location, DataSnapshot snapshot) {
+        location.setOverallReviewAvg(snapshot.child(locationName).child("overallReviewAvg").getValue(double.class));
+        location.setQuietnessAvg(snapshot.child(locationName).child("quietnessAvg").getValue(double.class));
+        location.setBusynessAvg(snapshot.child(locationName).child("businessAvg").getValue(double.class));
+        location.setComfortAvg(snapshot.child(locationName).child("comfortAvg").getValue(double.class));
     }
 
     private void specifyViewInfo(StudyLocation location) {

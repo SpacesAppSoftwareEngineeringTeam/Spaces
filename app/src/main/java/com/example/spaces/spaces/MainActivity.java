@@ -18,12 +18,19 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.spaces.spaces.models.StudyLocation;
+import com.example.spaces.spaces.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends BaseActivity
@@ -35,12 +42,14 @@ public class MainActivity extends BaseActivity
     private RecyclerView.Adapter mainRecyclerAdapter;
     private RecyclerView.LayoutManager mainRecyclerLayoutManager;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         setContentView(R.layout.activity_nav_drawer);
 
@@ -64,12 +73,12 @@ public class MainActivity extends BaseActivity
         // Launch activity for displaying list of all spaces in the database
 
         // Test location array
-        StudyLocation[] testSpacesData = new StudyLocation[10];
+        /*StudyLocation[] testSpacesData = new StudyLocation[10];
         Random r = new Random();
         for (int i = 0; i < testSpacesData.length; i++) {
             testSpacesData[i] = new StudyLocation("Space" + i);
             testSpacesData[i].setOverallReviewAvg(5 * r.nextDouble());
-        }
+        }*/
 
         // Setup a Floating Action Button to launch add space and review activities
         SpeedDialView fab = findViewById(R.id.fab);
@@ -106,8 +115,44 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        mainRecyclerAdapter = new SpacesAdapter(testSpacesData);
-        mainRecyclerView.setAdapter(mainRecyclerAdapter);
+        // Setup building list display
+        setupBuildingDataset();
+    }
+
+    // (based on setupFriendListDataset from FriendListActivity)
+    void setupBuildingDataset(){
+        final DatabaseReference locations = mDatabase.child("locations");
+
+        ValueEventListener locationListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<StudyLocation> locationList = getLocationsFromDataSnapShot(dataSnapshot);
+                StudyLocation[] locationArray = new StudyLocation[locationList.size()];
+                locationList.toArray(locationArray);
+                //@TODO modify SpacesAdapter to receive ArrayList i.o. Array; would clean up the code above
+                mainRecyclerAdapter = new SpacesAdapter(locationArray);
+                mainRecyclerView.setAdapter(mainRecyclerAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        locations.addListenerForSingleValueEvent(locationListener);
+    }
+
+    ArrayList<StudyLocation> getLocationsFromDataSnapShot(DataSnapshot dataSnapshot){
+        ArrayList<StudyLocation> locations = new ArrayList<StudyLocation>();
+        for(DataSnapshot location : dataSnapshot.getChildren()) {
+            String locationUID = location.getKey();
+            Log.d(TAG, "Location UID:" + locationUID);
+            String locationName = dataSnapshot.child(locationUID).child("locationName").getValue(String.class);
+            StudyLocation space = new StudyLocation(locationName);
+            space.setOverallReviewAvg(dataSnapshot.child(locationUID).child("overallReviewAvg").getValue(Double.class));
+            locations.add(space);
+        }
+        return locations;
     }
 
     @Override
