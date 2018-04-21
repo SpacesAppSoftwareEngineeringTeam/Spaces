@@ -60,6 +60,7 @@ public class AddFriendActivity extends BaseActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for (DataSnapshot user: dataSnapshot.getChildren()){
                     String friendUID = user.getKey();
                     String thisUserUID = mAuth.getCurrentUser().getUid();
@@ -70,9 +71,11 @@ public class AddFriendActivity extends BaseActivity {
                             "Friend Request Sent", Toast.LENGTH_LONG).show();
                     finish();
                 }
-                //nothing in the dataSnapshot
-                Toast.makeText(AddFriendActivity.this,
-                        "Email isn't registered!", Toast.LENGTH_LONG).show();
+                if (dataSnapshot.getChildrenCount() == 0) {
+                    //nothing in the dataSnapshot
+                    Toast.makeText(AddFriendActivity.this,
+                            "Email isn't registered!", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
