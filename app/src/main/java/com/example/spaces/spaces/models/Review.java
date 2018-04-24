@@ -4,6 +4,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 
 /**
@@ -48,6 +49,10 @@ public class Review implements Serializable {
         this.outlets = outlets;
         this.computers = computers;
         this.submissionDate = date;
+        this.overall = Float.parseFloat(
+                new DecimalFormat("#.#") // round to one decimal place
+                        .format((quietness + busyness + comfort) / 3)
+        );
     }
 
     @Exclude

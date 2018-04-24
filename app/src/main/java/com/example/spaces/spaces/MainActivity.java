@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.spaces.spaces.models.StudyLocation;
 import com.example.spaces.spaces.models.User;
@@ -70,16 +71,6 @@ public class MainActivity extends BaseActivity
         mainRecyclerLayoutManager = new LinearLayoutManager(this);
         mainRecyclerView.setLayoutManager(mainRecyclerLayoutManager);
 
-        // Launch activity for displaying list of all spaces in the database
-
-        // Test location array
-        /*StudyLocation[] testSpacesData = new StudyLocation[10];
-        Random r = new Random();
-        for (int i = 0; i < testSpacesData.length; i++) {
-            testSpacesData[i] = new StudyLocation("Space" + i);
-            testSpacesData[i].setOverallReviewAvg(5 * r.nextDouble());
-        }*/
-
         // Setup a Floating Action Button to launch add space and review activities
         SpeedDialView fab = findViewById(R.id.fab);
         SpeedDialOverlayLayout fabOverlay = findViewById(R.id.overlay);
@@ -96,12 +87,6 @@ public class MainActivity extends BaseActivity
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
                 switch (actionItem.getId()) {
                     case R.id.new_review:
-                        /*
-                        Intent i = new Intent(MainActivity.this, ReviewActivity.class);
-                        i.putExtra("name", "Babs' office");
-                        // start a review for the location specified
-                        startActivity(i);
-                        */
                         start(SelectLocationActivity.class);
                         // close the speed dial
                         return false;
@@ -120,10 +105,10 @@ public class MainActivity extends BaseActivity
     }
 
     // (based on setupFriendListDataset from FriendListActivity)
-    void setupBuildingDataset(){
+    void setupBuildingDataset() {
         final DatabaseReference locations = mDatabase.child("locations");
 
-        ValueEventListener locationListener = new ValueEventListener() {
+        locations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<StudyLocation> locationList = getLocationsFromDataSnapShot(dataSnapshot);
@@ -136,13 +121,17 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Toast.makeText(MainActivity.this,
+                        "Couldn't connect to the database. Are you connected to the internet?",
+                        Toast.LENGTH_LONG).show();
             }
-        };
-        locations.addListenerForSingleValueEvent(locationListener);
+        });
+        //);
+        //locations.addListenerForSingleValueEvent(locationListener);
+
     }
 
-    ArrayList<StudyLocation> getLocationsFromDataSnapShot(DataSnapshot dataSnapshot){
+    ArrayList<StudyLocation> getLocationsFromDataSnapShot(DataSnapshot dataSnapshot) {
         ArrayList<StudyLocation> locations = new ArrayList<StudyLocation>();
         for(DataSnapshot location : dataSnapshot.getChildren()) {
             String locationUID = location.getKey();
@@ -222,11 +211,14 @@ public class MainActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        //if (id == R.id.search) { /* launch search activity */ }
         if (id == R.id.log_out) {
             FirebaseAuth.getInstance().signOut();
             start(SignInActivity.class);
             finish();
         }
+
+
 
         return super.onOptionsItemSelected(item);
     }

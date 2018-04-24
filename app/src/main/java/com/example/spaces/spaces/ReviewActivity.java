@@ -138,9 +138,10 @@ public class ReviewActivity extends BaseActivity {
                             Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
                         }
                     }
-                    // add new location to database
-                    DatabaseReference newReviewRef = locationRef.child("reviews").push();
-                    newReviewRef.setValue(review);
+                    // add new review to database
+                    //DatabaseReference newReviewRef = locationRef.child("reviews").push();
+                    //newReviewRef.setValue(review);
+                    location.addReview(review);
 
                     // return to main screen
                     finish();

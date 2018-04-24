@@ -98,7 +98,7 @@ public class SpacePageActivity extends BaseActivity {
         if (b != null) locationName = b.getString("name");
 
         final DatabaseReference locations = mDatabase.child("locations");
-        locations.addListenerForSingleValueEvent(new ValueEventListener() {
+        locations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (!snapshot.child(locationName).exists()) {

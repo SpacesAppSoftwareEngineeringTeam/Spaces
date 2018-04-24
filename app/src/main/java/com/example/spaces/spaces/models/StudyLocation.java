@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
@@ -63,17 +64,17 @@ public class StudyLocation implements Serializable {
 
     @Exclude
     public double getOverallReviewAvg() {
-        return overallReviewAvg;
+        return round(overallReviewAvg);
     }
 
     @Exclude
     public void setOverallReviewAvg(double overallReviewAvg) {
-        this.overallReviewAvg = overallReviewAvg;
+        this.overallReviewAvg = round(overallReviewAvg);
     }
 
     @Exclude
     public double getQuietnessAvg() {
-        return quietnessAvg;
+        return round(quietnessAvg);
     }
 
     @Exclude
@@ -83,7 +84,7 @@ public class StudyLocation implements Serializable {
 
     @Exclude
     public double getBusynessAvg() {
-        return busynessAvg;
+        return round(busynessAvg);
     }
 
     @Exclude
@@ -93,7 +94,7 @@ public class StudyLocation implements Serializable {
 
     @Exclude
     public double getComfortAvg() {
-        return comfortAvg;
+        return round(comfortAvg);
     }
 
     @Exclude
@@ -103,7 +104,7 @@ public class StudyLocation implements Serializable {
 
     @Exclude
     public double getWhiteboardAvg() {
-        return whiteboardAvg;
+        return round(whiteboardAvg);
     }
 
     @Exclude
@@ -113,7 +114,7 @@ public class StudyLocation implements Serializable {
 
     @Exclude
     public double getOutletAvg() {
-        return outletAvg;
+        return round(outletAvg);
     }
 
     @Exclude
@@ -123,7 +124,7 @@ public class StudyLocation implements Serializable {
 
     @Exclude
     public double getComputerAvg() {
-        return computerAvg;
+        return round(computerAvg);
     }
 
     @Exclude
@@ -142,29 +143,41 @@ public class StudyLocation implements Serializable {
     }
 
     @Exclude
-    public void addReview(DatabaseReference dref, Review review){
-        int size = reviews.size();
+    public void addReview(Review review) {
+        DatabaseReference locationRef = FirebaseDatabase.getInstance().getReference().
+                child("locations").child(locationName);
+        DatabaseReference reviewRef = locationRef.child("reviews").push();
+        updateAllAverages(locationRef, review);
+        reviews.put(reviewRef.toString(), review);
+        reviewRef.setValue(review);
+    }
 
-        setOverallReviewAvg(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
+    @Exclude
+    public void updateAllAverages(DatabaseReference locationRef, Review review) {
+        int size = reviews.size() + 1;
+
         setQuietnessAvg(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
+        try {
+            locationRef.child("quietnessAvg").setValue(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
+        } catch (Exception e) {e.printStackTrace();}
         setBusynessAvg(calcNewAvg(getBusynessAvg(), size, review.getBusyness()));
+        locationRef.child("busynessAvg").setValue(calcNewAvg(getBusynessAvg(), size, review.getBusyness()));
         setComfortAvg(calcNewAvg(getComfortAvg(), size, review.getComfort()));
+        locationRef.child("comfortAvg").setValue(calcNewAvg(getComfortAvg(), size, review.getComfort()));
 
         int hasWhiteboards = (review.getWhiteboards()) ? 1 : 0;
         int hasOutlets = (review.getOutlets()) ? 1 : 0;
         int hasComputers = (review.getComputers()) ? 1 : 0;
         setWhiteboardAvg(calcNewAvg(getWhiteboardAvg(), size, hasWhiteboards));
+        locationRef.child("whiteboardAvg").setValue(calcNewAvg(getWhiteboardAvg(), size, hasWhiteboards));
         setOutletAvg(calcNewAvg(getOutletAvg(), size, hasOutlets));
+        locationRef.child("outletAvg").setValue(calcNewAvg(getOutletAvg(), size, hasOutlets));
         setComputerAvg(calcNewAvg(getComputerAvg(), size, hasComputers));
+        locationRef.child("computerAvg").setValue(calcNewAvg(getComputerAvg(), size, hasComputers));
 
-        reviews.put(dref.toString(), review);
-    }
-
-    @Exclude
-    public void addReview(Review review){
-        DatabaseReference dref = FirebaseDatabase.getInstance().getReference().
-                child("locations").child(locationName).child("reviews").push();
-        addReview(dref, review);
+        //float reviewAvg = review.getQuietness() + review.getBusyness() + review.getComfort() / 3;
+        setOverallReviewAvg(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
+        locationRef.child("overallReviewAvg").setValue(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
     }
 
     @Exclude
@@ -187,10 +200,18 @@ public class StudyLocation implements Serializable {
         this.locationName = locationName;
     }
 
+    @Exclude
+    private double calcNewAvg(double oldAvg, int numReviews, float newReviewScore) {
+        if (numReviews < 2)
+            return newReviewScore;
+        else
+            return (oldAvg * (numReviews - 1)/ numReviews) + (newReviewScore / numReviews);
+    }
 
     @Exclude
-    private double calcNewAvg(double oldAvg, int numReviews, float newReviewScore){
-        return (oldAvg * (numReviews - 1)/ numReviews) + (newReviewScore / numReviews);
+    private double round(double value) {
+        // round to one decimal place
+        return Double.parseDouble(new DecimalFormat("#.#").format(value));
     }
 
 }
