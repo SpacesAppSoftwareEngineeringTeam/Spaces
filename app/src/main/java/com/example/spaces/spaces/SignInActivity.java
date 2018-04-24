@@ -59,7 +59,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         // Check auth on Activity start
         if (mAuth.getCurrentUser() != null) {
-            onAuthSuccess(mAuth.getCurrentUser(), mAuth.getCurrentUser().getDisplayName());
+            onAuthSuccess();
         }
     }
 
@@ -81,7 +81,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                         hideProgressDialog();
                         if (task.isSuccessful()) {
                             FirebaseUser user = task.getResult().getUser();
-                            onAuthSuccess(user, user.getDisplayName());
+                            onAuthSuccess();
                         } else {
                             Toast.makeText(SignInActivity.this, "Sign In Failed",
                                     Toast.LENGTH_SHORT).show();
@@ -122,7 +122,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                                             }
                                         }
                                     });
-                            onAuthSuccess(user, name);
+                            onAuthSuccessNewUser(user, name);
                         } else {
                             Log.d(TAG, "createUser failed",task.getException());
                             Toast.makeText(SignInActivity.this, "Sign Up Failed",
@@ -132,11 +132,14 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
                 });
     }
 
-    private void onAuthSuccess(FirebaseUser user, String name) {
-        String username = name;
+    private void onAuthSuccessNewUser(FirebaseUser user, String name){
         // Write new user
-        writeNewUser(user.getUid(), username, user.getEmail());
+        writeNewUser(user.getUid(), name, user.getEmail());
         // Go to MainActivity
+        onAuthSuccess();
+    }
+
+    private void onAuthSuccess() {
         startActivity(new Intent(SignInActivity.this, MainActivity.class));
         finish();
     }
