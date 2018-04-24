@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity
     private RecyclerView.LayoutManager mainRecyclerLayoutManager;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private boolean stopUpdating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,9 +122,12 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,
-                        "Couldn't connect to the database. Are you connected to the internet?",
-                        Toast.LENGTH_LONG).show();
+                if (!stopUpdating) {
+                    Toast.makeText(MainActivity.this,
+                            "Couldn't connect to the database. Are you connected to the internet?",
+                            Toast.LENGTH_LONG).show();
+                }
+
             }
         });
         //);
@@ -213,6 +217,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
         //if (id == R.id.search) { /* launch search activity */ }
         if (id == R.id.log_out) {
+            stopUpdating = true;
             FirebaseAuth.getInstance().signOut();
             start(SignInActivity.class);
             finish();
