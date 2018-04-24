@@ -149,7 +149,7 @@ public class SpacePageActivity extends BaseActivity {
     private void assignLocationValues(StudyLocation location, DataSnapshot snapshot) {
         location.setOverallReviewAvg(snapshot.child(locationName).child("overallReviewAvg").getValue(double.class));
         location.setQuietnessAvg(snapshot.child(locationName).child("quietnessAvg").getValue(double.class));
-        location.setBusynessAvg(snapshot.child(locationName).child("businessAvg").getValue(double.class));
+        location.setBusynessAvg(snapshot.child(locationName).child("busynessAvg").getValue(double.class));
         location.setComfortAvg(snapshot.child(locationName).child("comfortAvg").getValue(double.class));
     }
 
