@@ -126,11 +126,8 @@ public class SpacePageActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(view.getContext(), ReviewActivity.class);
                 // open the add review page for the location specified
-                view.getContext().startActivity(
-                        i.putExtra("name", locationName)
-                );
+                start(ReviewActivity.class, "name", locationName);
             }
         });
 

@@ -15,5 +15,8 @@
     <color name="pureWhite">#FFFFFF</color>
     <color name="transparent">#FFFFFFFF</color>
 
+    <color name="card0">#cfd8dc</color>
+    <color name="card1">#efebe9</color>
+
     <color name="ic_launcher_background">#6D9EEB</color>
 </resources>

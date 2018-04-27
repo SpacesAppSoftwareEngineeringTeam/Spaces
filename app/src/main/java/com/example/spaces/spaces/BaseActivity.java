@@ -56,6 +56,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * starts an activity and passes it a string parameter
+     * @param activity  the activity class to start
+     * @param name  the variable name of the string being passed
+     * @param value  the string being passed
+     */
+    protected <T extends Activity> void start(Class<T> activity, String name, String value) {
+        Intent i = new Intent(this, activity);
+        startActivity(i.putExtra(name, value));
+    }
+
+    /**
      * @return unique id of the current user
      */
     public String getUid() {

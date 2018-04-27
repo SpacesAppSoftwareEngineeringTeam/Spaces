@@ -132,9 +132,8 @@ public class AddSpaceActivity extends BaseActivity {
 
                         // if this activity was launched by the SelectLocationActivity
                         if (prefilledName != null) {
-                            // then proceed to the review page
-                            Intent i = new Intent(AddSpaceActivity.this, ReviewActivity.class);
-                            startActivity(i.putExtra("name", locationName));
+                            // proceed to the review page
+                            start(ReviewActivity.class, "name", locationName);
                         }
 
                         // return to main screen

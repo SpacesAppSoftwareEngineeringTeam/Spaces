@@ -1,8 +1,6 @@
 package com.example.spaces.spaces;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.spaces.spaces.models.StudyLocation;
-import com.example.spaces.spaces.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +28,8 @@ import com.leinardi.android.speeddial.SpeedDialOverlayLayout;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Iterator;
+
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +41,8 @@ public class MainActivity extends BaseActivity
     private RecyclerView.LayoutManager mainRecyclerLayoutManager;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private boolean stopUpdating = false;
+    private boolean outletFilter = false;
+    private boolean whiteboardFilter = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,53 +110,59 @@ public class MainActivity extends BaseActivity
         locations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<StudyLocation> locationList = getLocationsFromDataSnapShot(dataSnapshot);
-                StudyLocation[] locationArray = new StudyLocation[locationList.size()];
-                locationList.toArray(locationArray);
-                //@TODO modify SpacesAdapter to receive ArrayList i.o. Array; would clean up the code above
-                mainRecyclerAdapter = new SpacesAdapter(locationArray);
+                ArrayList<StudyLocation> locationList = getLocationsFromDataSnapshot(dataSnapshot);
+                int size = locationList.size();
+
+                for (Iterator<StudyLocation> iter = locationList.iterator(); iter.hasNext();) {
+                    StudyLocation location = iter.next();
+                    if ((outletFilter && location.getOutletAvg() < 0.5) ||
+                            (whiteboardFilter && location.getWhiteboardAvg() < 0.5)) {
+                        System.out.println("removing "+location.getLocationName()+" whiteboardAvg="+location.getWhiteboardAvg()+" outletAvg="+location.getWhiteboardAvg());
+                        iter.remove();
+                        size--;
+                    }
+                }
+
+                StudyLocation[] locationsToShow = locationList.toArray( new StudyLocation[size] );
+
+                mainRecyclerAdapter = new SpacesAdapter(locationsToShow);
                 mainRecyclerView.setAdapter(mainRecyclerAdapter);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                if (!stopUpdating) {
-                    Toast.makeText(MainActivity.this,
-                            "Couldn't connect to the database. Are you connected to the internet?",
-                            Toast.LENGTH_LONG).show();
-                }
-
             }
         });
-        //);
-        //locations.addListenerForSingleValueEvent(locationListener);
 
     }
 
-    ArrayList<StudyLocation> getLocationsFromDataSnapShot(DataSnapshot dataSnapshot) {
-        ArrayList<StudyLocation> locations = new ArrayList<StudyLocation>();
+    ArrayList<StudyLocation> getLocationsFromDataSnapshot(DataSnapshot dataSnapshot) {
+        ArrayList<StudyLocation> locations = new ArrayList<>();
         for(DataSnapshot location : dataSnapshot.getChildren()) {
             String locationUID = location.getKey();
             Log.d(TAG, "Location UID:" + locationUID);
             String locationName = dataSnapshot.child(locationUID).child("locationName").getValue(String.class);
             StudyLocation space = new StudyLocation(locationName);
             space.setOverallReviewAvg(dataSnapshot.child(locationUID).child("overallReviewAvg").getValue(Double.class));
+            space.setOutletAvg(dataSnapshot.child(locationUID).child("outletAvg").getValue(Float.class));
+            space.setWhiteboardAvg(dataSnapshot.child(locationUID).child("whiteboardAvg").getValue(Float.class));
             locations.add(space);
         }
         return locations;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
-
         // Check auth on Activity start
         if (mAuth.getCurrentUser() != null) {
-            updateUI(mAuth.getCurrentUser());
+            updateSidebar(mAuth.getCurrentUser());
         }
     }
 
-    public void updateUI(FirebaseUser currentUser){
+    // update the sidebar to show current user's name and email
+    public void updateSidebar(FirebaseUser currentUser){
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navView = drawer.findViewById(R.id.nav_view);
         View headerLayout = navView.getHeaderView(0);
@@ -192,9 +196,13 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_add_friends) {
             start(AddFriendActivity.class);
         } else if (id == R.id.nav_outlets) {
-
+            // toggle outlet filter
+            outletFilter = !outletFilter;
+            setupBuildingDataset();
         } else if (id == R.id.nav_whiteboards) {
-
+            // toggle whiteboard filter
+            whiteboardFilter = !whiteboardFilter;
+            setupBuildingDataset();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -217,13 +225,10 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
         //if (id == R.id.search) { /* launch search activity */ }
         if (id == R.id.log_out) {
-            stopUpdating = true;
             FirebaseAuth.getInstance().signOut();
             start(SignInActivity.class);
             finish();
         }
-
-
 
         return super.onOptionsItemSelected(item);
     }

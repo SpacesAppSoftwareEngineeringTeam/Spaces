@@ -1,7 +1,6 @@
 package com.example.spaces.spaces;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -14,11 +13,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.security.Permissions;
 
 
-
-import android.util.Log;
 /**
  * Created by Owen on 4/8/18.
  */

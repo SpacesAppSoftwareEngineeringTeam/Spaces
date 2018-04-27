@@ -1,7 +1,6 @@
 package com.example.spaces.spaces;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.example.spaces.spaces.models.StudyLocation;
 
 public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder> {
 
-    private StudyLocation[] mDataset;
+    private StudyLocation[] locations;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -53,8 +52,8 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SpacesAdapter(StudyLocation[] myDataset) {
-        mDataset = myDataset;
+    public SpacesAdapter(StudyLocation[] locations) {
+        this.locations = locations;
     }
 
     // Create new views (invoked by the layout manager)
@@ -64,8 +63,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.spaces_cardview_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -75,30 +73,30 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         // - replace the contents of the view with that element
 
         // Set card characteristics
-        if (position % 2 == 0)           // Alternate light gray and gray for enhanced readability
-            holder.mCardView.setCardBackgroundColor(Color.GRAY);
+        if (position % 2 == 0)           // Alternate colors for enhanced readability
+            holder.mCardView.setCardBackgroundColor(Color.parseColor("#cfd8dc"));//Color.WHITE);
         else
-            holder.mCardView.setCardBackgroundColor(Color.LTGRAY);
+            holder.mCardView.setCardBackgroundColor(Color.parseColor("#efebe9"));//Color.LTGRAY);
 
         // Set space name
-        holder.SpaceName.setText(mDataset[position].getLocationName());
+        holder.SpaceName.setText(locations[position].getLocationName());
         holder.SpaceName.setTextSize(24);
 
         // Set space thumbnail
         //holder.SpaceImage.setImage????
 
         // Set space rating
-        StringBuilder s = new StringBuilder();        // Display rating to one decimal
-        String rating = Double.toString(mDataset[position].getOverallReviewAvg());
+        StringBuilder s = new StringBuilder();   // Display rating to one decimal
+        String rating = Double.toString(locations[position].getOverallReviewAvg());
         for (int i = 0; i < 3; i++) {
             s.append(rating.charAt(i));
         }
         rating = s.toString();
         holder.SpaceRating.setText(rating);
-        int RatingColor;                             // Set text color based on rating value
-        if (mDataset[position].getOverallReviewAvg() < 2)
+        int RatingColor;               // Set text color based on rating value
+        if (locations[position].getOverallReviewAvg() < 2)
             RatingColor = Color.RED;   // 0-1 rating is red
-        else if (mDataset[position].getOverallReviewAvg() < 4)
+        else if (locations[position].getOverallReviewAvg() < 4)
             RatingColor = Color.YELLOW; // 2-4 rating is yellow
         else
             RatingColor = Color.GREEN;   // 4+ rating is green
@@ -106,7 +104,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         holder.SpaceRating.setTextColor(RatingColor);
 
         // Determine the current page for responding to card selections
-        setCurrentLocation(mDataset[position], holder);
+        setCurrentLocation(locations[position], holder);
     }
 
     private void setCurrentLocation(StudyLocation l, ViewHolder h) {
@@ -116,6 +114,6 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return locations.length;
     }
 }

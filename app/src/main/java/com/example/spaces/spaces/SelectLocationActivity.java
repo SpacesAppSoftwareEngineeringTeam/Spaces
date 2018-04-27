@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.spaces.spaces.models.Review;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,13 +56,12 @@ public class SelectLocationActivity extends BaseActivity {
                         // try to pull the location from the database
                         StudyLocation location = snapshot.getValue(StudyLocation.class);
                         if (location != null) {
-                            // review the preexisting location
-                            review(name);
+                            // open the add review page for the preexisting location
+                            start(ReviewActivity.class, "name", name);
                         }
                         else {
-                            //Toast.makeText(SelectLocationActivity.this, "", Toast.LENGTH_LONG).show();
-                            // allow user to create the location they want to review
-                            newSpace(name);
+                            // open the add review page for the location the user wants to review
+                            start(AddSpaceActivity.class, "name", name);
                         }
 
                     }
@@ -75,19 +75,6 @@ public class SelectLocationActivity extends BaseActivity {
 
             }
         });
-    }
-
-    private void review(String location) {
-        Intent i = new Intent(this, ReviewActivity.class);
-        // open the add review page for the location specified
-        startActivity(i.putExtra("name", location));
-    }
-
-    private void newSpace(String location) {
-        Intent i = new Intent(this, AddSpaceActivity.class);
-        // open the add review page for the location specified
-        startActivity(i.putExtra("name", location));
-
     }
 
 
