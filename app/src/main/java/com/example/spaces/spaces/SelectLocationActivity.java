@@ -1,14 +1,12 @@
 package com.example.spaces.spaces;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.spaces.spaces.models.Review;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +26,7 @@ public class SelectLocationActivity extends BaseActivity {
     private Button nextButton;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
+    private String purpose; // the reason a location is being selected e.g. "view" or "review"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +42,10 @@ public class SelectLocationActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
+        // get the location name passed to this activity on creation, if any
+        Bundle b = getIntent().getExtras();
+        if (b != null) purpose = b.getString("purpose");
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final String name = nameEntry.getText().toString();
@@ -55,14 +58,23 @@ public class SelectLocationActivity extends BaseActivity {
                     public void onDataChange(DataSnapshot snapshot) {
                         // try to pull the location from the database
                         StudyLocation location = snapshot.getValue(StudyLocation.class);
-                        if (location != null) {
-                            // open the add review page for the preexisting location
-                            start(ReviewActivity.class, "name", name);
+                        switch (purpose) {
+                            case "review":
+                                if (location == null)  // open the add space page for the location the user wants to review
+                                    start(AddSpaceActivity.class, "name", name);
+                                else        // open the add review page for the preexisting location
+                                    start(ReviewActivity.class, "name", name);
+                                break;
+                            case "view":
+                                if (location == null)
+                                    Toast.makeText(SelectLocationActivity.this,
+                                            "That location doesn't exist", Toast.LENGTH_LONG).show();
+                                else
+                                    start(SpacePageActivity.class, "name", name);
+                                break;
+                            default: break;
                         }
-                        else {
-                            // open the add review page for the location the user wants to review
-                            start(AddSpaceActivity.class, "name", name);
-                        }
+
 
                     }
                     @Override

@@ -107,7 +107,6 @@ public class SpacePageActivity extends BaseActivity {
                 }
                 else {
                     // pull the location info from the database
-                    //StudyLocation location = (StudyLocation)snapshot.child(locationName).getValue();
                     StudyLocation location = new StudyLocation(snapshot.child(locationName).child("locationName").getValue(String.class));
                     assignLocationValues(location, snapshot);
                     // populate the space page with info on this location

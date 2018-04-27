@@ -17,7 +17,7 @@
         android:layout_marginTop="50dp"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:hint="@string/hint_select_location"
+        android:hint="@string/select_view_location"
         android:maxLines="1"
         android:textAlignment="center" />
     <Button
@@ -28,7 +28,7 @@
         android:layout_marginTop="50dp"
         android:background="@color/colorPrimary"
         android:textColor="@color/pureWhite"
-        android:text="@string/review_button_text" />
+        android:text="@string/next_button_text" />
         <!--
     <Button
         android:id="@+id/button_back"

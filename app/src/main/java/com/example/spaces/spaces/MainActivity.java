@@ -86,7 +86,7 @@ public class MainActivity extends BaseActivity
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
                 switch (actionItem.getId()) {
                     case R.id.new_review:
-                        start(SelectLocationActivity.class);
+                        start(SelectLocationActivity.class, "purpose", "review");
                         // close the speed dial
                         return false;
                     case R.id.new_space:
@@ -223,7 +223,9 @@ public class MainActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //if (id == R.id.search) { /* launch search activity */ }
+        if (id == R.id.search) {
+            start(SelectLocationActivity.class, "purpose", "view");
+        }
         if (id == R.id.log_out) {
             FirebaseAuth.getInstance().signOut();
             start(SignInActivity.class);
