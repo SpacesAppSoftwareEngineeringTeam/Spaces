@@ -120,7 +120,6 @@ public class ReviewActivity extends BaseActivity {
                             +"\n   whiteboards="+whiteboardsBox.isChecked()+", outlets="+outletsBox.isChecked()+", computers="+computersBox.isChecked()
                             +"\n   date="+Calendar.getInstance().getTime().toString());
 
-
                     // create a review from the current entries
                     Review review = new Review(
                             locationName, reviewText.getText().toString(),
@@ -131,16 +130,14 @@ public class ReviewActivity extends BaseActivity {
                     for (Bitmap pic : pictures) {
                         Uri uri = ImageUploader.getImageUri(v.getContext(), pic);
                         if (uri != null) {
-                            // add image to the StudyLocation
-                            location.addPicture(uri.toString());
                             // upload image to firebase cloud storage
                             ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
+                            // add image to the StudyLocation and push it to the database
+                            location.addPicture(uri, snapshot);
                             Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
                         }
                     }
-                    // add new review to database
-                    //DatabaseReference newReviewRef = locationRef.child("reviews").push();
-                    //newReviewRef.setValue(review);
+                    // add new review to the StudyLocation and push it to the database
                     location.addReview(review);
 
                     // return to main screen
