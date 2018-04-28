@@ -143,17 +143,6 @@ public class MainActivity extends BaseActivity
 
     ArrayList<StudyLocation> getLocationsFromDataSnapshot(DataSnapshot dataSnapshot) {
         ArrayList<StudyLocation> locations = new ArrayList<>();
-<<<<<<< HEAD
-        for(DataSnapshot location : dataSnapshot.getChildren()) {
-            String locationUID = location.getKey();
-            Log.d(TAG, "Location UID:" + locationUID);
-            String locationName = dataSnapshot.child(locationUID).child("locationName").getValue(String.class);
-            StudyLocation space = new StudyLocation(locationName);
-            space.setOverallReviewAvg(dataSnapshot.child(locationUID).child("overallReviewAvg").getValue(Float.class));
-            space.setOutletAvg(dataSnapshot.child(locationUID).child("outletAvg").getValue(Float.class));
-            space.setWhiteboardAvg(dataSnapshot.child(locationUID).child("whiteboardAvg").getValue(Float.class));
-            locations.add(space);
-=======
         Iterable<DataSnapshot> locationSnapshots = dataSnapshot.getChildren();
 
         for (DataSnapshot locationSnap : locationSnapshots) {
@@ -161,7 +150,6 @@ public class MainActivity extends BaseActivity
             StudyLocation location = new StudyLocation(locationName, locationSnap);
 
             locations.add(location);
->>>>>>> 41cd61a1563b787c34cd54c3591a64581aae0c6b
         }
         Log.d(TAG, "returning from getLocationsFromDataSnapshot");
         return locations;

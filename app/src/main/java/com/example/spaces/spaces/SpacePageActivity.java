@@ -32,11 +32,6 @@ import android.widget.Toast;
 import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
-import android.net.Uri;
-
-=======
->>>>>>> 41cd61a1563b787c34cd54c3591a64581aae0c6b
 
 /**
  * Created by Matt on 4/11/2018.

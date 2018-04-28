@@ -40,12 +40,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
     private StudyLocation[] locations;
-<<<<<<< HEAD
-    private ArrayList<SpacesAdapter.ViewHolder> testHolders;
-=======
     private ViewHolder[] viewHolders;
-
->>>>>>> 41cd61a1563b787c34cd54c3591a64581aae0c6b
 
     /**
      * Provide a reference to the views for each data item
@@ -178,18 +173,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         viewHolders[position].spaceRating.setTextColor(RatingColor);
 
         // Determine the current page for responding to card selections
-<<<<<<< HEAD
-        setCurrentLocation(locations[position], holder);
-
-        // Save holder as a field accessible for testing
-        testHolders.add(holder);
-    }
-
-    public ArrayList<SpacesAdapter.ViewHolder> getTestHolders() {
-        return testHolders;
-=======
         setCurrentLocation(locations[position], viewHolders[position]);
->>>>>>> 41cd61a1563b787c34cd54c3591a64581aae0c6b
     }
 
     private void setCurrentLocation(StudyLocation l, ViewHolder h) {

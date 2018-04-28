@@ -13,8 +13,7 @@ public class SpacesAdapterUnitTest {
 
     private StudyLocation[] testLocations = {new StudyLocation("test1"), new StudyLocation("test2")};
     private SpacesAdapter testAdapter = new SpacesAdapter(testLocations);
-
-    //private ArrayList<SpacesAdapter.ViewHolder> testHolders = testAdapter.getTestHolders();
+    private ArrayList<SpacesAdapter.ViewHolder> testHolders = testAdapter.getTestHolders();
 
     @Test
     public void checkCardColor() {
