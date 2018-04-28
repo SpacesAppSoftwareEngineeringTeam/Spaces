@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity
             Log.d(TAG, "Location UID:" + locationUID);
             String locationName = dataSnapshot.child(locationUID).child("locationName").getValue(String.class);
             StudyLocation space = new StudyLocation(locationName);
-            space.setOverallReviewAvg(dataSnapshot.child(locationUID).child("overallReviewAvg").getValue(Double.class));
+            space.setOverallReviewAvg(dataSnapshot.child(locationUID).child("overallReviewAvg").getValue(Float.class));
             space.setOutletAvg(dataSnapshot.child(locationUID).child("outletAvg").getValue(Float.class));
             space.setWhiteboardAvg(dataSnapshot.child(locationUID).child("whiteboardAvg").getValue(Float.class));
             locations.add(space);

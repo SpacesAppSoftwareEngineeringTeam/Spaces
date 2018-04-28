@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.graphics.Color;
+import java.util.ArrayList;
 
 import com.example.spaces.spaces.models.StudyLocation;
 
@@ -19,6 +20,7 @@ import com.example.spaces.spaces.models.StudyLocation;
 public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder> {
 
     private StudyLocation[] locations;
+    private ArrayList<SpacesAdapter.ViewHolder> testHolders;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -105,6 +107,13 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
 
         // Determine the current page for responding to card selections
         setCurrentLocation(locations[position], holder);
+
+        // Save holder as a field accessible for testing
+        testHolders.add(holder);
+    }
+
+    public ArrayList<SpacesAdapter.ViewHolder> getTestHolders() {
+        return testHolders;
     }
 
     private void setCurrentLocation(StudyLocation l, ViewHolder h) {
