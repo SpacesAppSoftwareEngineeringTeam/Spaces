@@ -1,7 +1,9 @@
 package com.example.spaces.spaces.models;
 
 import android.net.Uri;
+import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
@@ -10,7 +12,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -22,7 +23,6 @@ public class StudyLocation implements Serializable {
 
     // Firebase requires model classes to have public fields
     public String locationName = "";
-    public ArrayList<String> pictureIds = new ArrayList<>();
     public double overallReviewAvg = 0;
     public double quietnessAvg = 0;
     public double busynessAvg = 0;
@@ -30,6 +30,7 @@ public class StudyLocation implements Serializable {
     public double whiteboardAvg = 0;
     public double outletAvg = 0;
     public double computerAvg = 0;
+    public Map<String, String> pictureIds = new HashMap<>();
     public Map<String, Object> reviews = new HashMap<>();
     public boolean accessibilityFlag = false;
 
@@ -41,25 +42,58 @@ public class StudyLocation implements Serializable {
         this.locationName = locationName;
     }
 
+    /**
+     * Creates a StudyLocation with the given name
+     * and populates it with info stored under that name in the database
+     * @param locationName  name of the location to get
+     * @param snapshot    snapshot from a valuelistener on a database reference to a location
+     */
+    public StudyLocation(String locationName, DataSnapshot snapshot) {
+        this.locationName = locationName;
+        this.setAverages(snapshot);
+        this.setPictureIds(snapshot);
+    }
+
 
     @Exclude
-    public ArrayList<String> getPictureIds() {
+    public Map<String, String> getPictureIds() {
         return pictureIds;
     }
 
     @Exclude
-    public void addPicture(String pictureIdString){
-        pictureIds.add(pictureIdString);
+    public void addPicture(Uri pictureId, DataSnapshot ds){
+        addPicture(pictureId.toString(), ds);
     }
 
+    /**
+     * Adds the specified picture uri to this location in the object and in the database
+     * @param pictureId  uri to add
+     * @param locationSnapshot  DataSnapshot of all locations or of the location to add to
+     */
     @Exclude
-    public void addPicture(Uri pictureId){
-        pictureIds.add(pictureId.toString());
-    }
+    public void addPicture(String pictureId, DataSnapshot locationSnapshot) {
+        DatabaseReference locationRef = FirebaseDatabase.getInstance().getReference().
+                child("locations").child(locationName);
+        DatabaseReference newPicRef = locationRef.child("pictureIds").push();
 
-    @Exclude
-    public void addPictures(ArrayList<String> pictureIds) {
-        this.pictureIds.addAll(pictureIds);
+        boolean alreadyAdded = false;
+        Iterable<DataSnapshot> oldPicRefs = locationSnapshot.child("pictureIds").getChildren();
+        for (DataSnapshot picRef : oldPicRefs) {
+            try {
+                if (((Map<String, String>) picRef.getValue()).values().contains(pictureId))
+                    alreadyAdded = true;
+            } catch (ClassCastException e) { // this runs if locationSnapshot is of a single location
+                if (((String) picRef.getValue()).contains(pictureId))
+                    alreadyAdded = true;
+            }
+        }
+
+        if (!alreadyAdded) {
+            Log.d("StudyLocation.addPic", "pictureId = "+pictureId);
+            Log.d("StudyLocation.addPic", "newPicRef = "+newPicRef.toString());
+            pictureIds.put(newPicRef.toString(), pictureId);
+            newPicRef.setValue(pictureId);
+        }  else Log.d("StudyLocation.addPic", "tried to add a picture that was already added");
     }
 
     @Exclude
@@ -133,6 +167,26 @@ public class StudyLocation implements Serializable {
     }
 
     @Exclude
+    public boolean isAccessible() {
+        return accessibilityFlag;
+    }
+
+    @Exclude
+    public void setAccessibilityFlag(boolean accessibilityFlag) {
+        this.accessibilityFlag = accessibilityFlag;
+    }
+
+    @Exclude
+    public String getLocationName() {
+        return locationName;
+    }
+
+    @Exclude
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    @Exclude
     public Map<String, Object> getReviews() {
         return reviews;
     }
@@ -152,8 +206,47 @@ public class StudyLocation implements Serializable {
         reviewRef.setValue(review);
     }
 
+
+
     @Exclude
-    public void updateAllAverages(DatabaseReference locationRef, Review review) {
+    private void setAverages(DataSnapshot snapshot) {
+        DataSnapshot s = snapshot.child("overallReviewAvg");
+        if (s.getValue(double.class) != null) {
+            System.out.println("got "+locationName+"'s overallReviewAvg: "+s.getValue(double.class));
+            setOverallReviewAvg(s.getValue(double.class));
+        } else System.out.println(locationName+"'s overallReviewAvg was null");
+
+        s = snapshot.child("quietnessAvg");
+        if (s.getValue(double.class) != null)
+            setQuietnessAvg(s.getValue(double.class));
+        s = snapshot.child("busynessAvg");
+        if (s.getValue(double.class) != null)
+            setBusynessAvg(s.getValue(double.class));
+        s = snapshot.child("comfortAvg");
+        if (s.getValue(double.class) != null)
+            setComfortAvg(s.getValue(double.class));
+
+        s = snapshot.child("whiteboardAvg");
+        if (s.getValue(double.class) != null)
+            setWhiteboardAvg(s.getValue(double.class));
+        s = snapshot.child("outletAvg");
+        if (s.getValue(double.class) != null)
+            setOutletAvg(s.getValue(double.class));
+
+    }
+
+    @Exclude
+    public void setPictureIds(DataSnapshot snapshot) {
+        Iterable<DataSnapshot> picSnapshots = snapshot.child("pictureIds").getChildren();
+        for (DataSnapshot picSnap : picSnapshots) {
+            if (picSnap.getValue(String.class) != null)
+                this.pictureIds.put(picSnap.getRef().toString(), picSnap.getValue(String.class));
+        }
+    }
+
+
+    @Exclude
+    private void updateAllAverages(DatabaseReference locationRef, Review review) {
         int size = reviews.size() + 1;
 
         setQuietnessAvg(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
@@ -175,30 +268,11 @@ public class StudyLocation implements Serializable {
         setComputerAvg(calcNewAvg(getComputerAvg(), size, hasComputers));
         locationRef.child("computerAvg").setValue(calcNewAvg(getComputerAvg(), size, hasComputers));
 
-        //float reviewAvg = review.getQuietness() + review.getBusyness() + review.getComfort() / 3;
         setOverallReviewAvg(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
         locationRef.child("overallReviewAvg").setValue(calcNewAvg(getOverallReviewAvg(), size, review.getOverall()));
     }
 
-    @Exclude
-    public boolean isAccessible() {
-        return accessibilityFlag;
-    }
 
-    @Exclude
-    public void setAccessibilityFlag(boolean accessibilityFlag) {
-        this.accessibilityFlag = accessibilityFlag;
-    }
-
-    @Exclude
-    public String getLocationName() {
-        return locationName;
-    }
-
-    @Exclude
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
 
     @Exclude
     private double calcNewAvg(double oldAvg, int numReviews, float newReviewScore) {

@@ -31,12 +31,14 @@ import android.graphics.Color;
 import android.widget.Toast;
 import android.support.design.widget.FloatingActionButton;
 
+import java.util.ArrayList;
+
 /**
  * Created by Matt on 4/11/2018.
  */
 
 public class SpacePageActivity extends BaseActivity {
-    private static final String TAG = "Spaces#SpacePageActivit";
+    private static final String TAG = "SpacePageActivity";
 
     // Location structure for the view
     //private static StudyLocation location;
@@ -76,7 +78,9 @@ public class SpacePageActivity extends BaseActivity {
     // [END declare_database_ref]
 
 
-    // General constructor
+    /**
+     * General constructor
+     */
     public SpacePageActivity() {
         super();
     }
@@ -86,6 +90,7 @@ public class SpacePageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.space_page);
         setViews();
+
         // [START get_storage_ref]
         mStorageRef = FirebaseStorage.getInstance().getReference();
         // [END get_storage_ref]
@@ -97,7 +102,8 @@ public class SpacePageActivity extends BaseActivity {
         Bundle b = getIntent().getExtras();
         if (b != null) locationName = b.getString("name");
 
-        final DatabaseReference locations = mDatabase.child("locations");
+        DatabaseReference locations = mDatabase.child("locations");
+
         locations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -106,9 +112,8 @@ public class SpacePageActivity extends BaseActivity {
                     Log.d(TAG, "No location with the name "+locationName+" exists");
                 }
                 else {
-                    // pull the location info from the database
-                    StudyLocation location = new StudyLocation(snapshot.child(locationName).child("locationName").getValue(String.class));
-                    assignLocationValues(location, snapshot);
+                    // pull the location info from the database into a StudyLocation
+                    StudyLocation location = new StudyLocation(locationName, snapshot.child(locationName));
                     // populate the space page with info on this location
                     specifyViewInfo(location);
                 }
@@ -118,6 +123,7 @@ public class SpacePageActivity extends BaseActivity {
                 de.toException().printStackTrace();
             }
         });
+
 
         // Setup a Floating Action Button to launch add review activity (based on MainActivity implementation)
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -140,14 +146,6 @@ public class SpacePageActivity extends BaseActivity {
 
     }
 
-    //@TODO simplify database pulls and add exception handling for null values
-    // Assign location values from the database to a location object
-    private void assignLocationValues(StudyLocation location, DataSnapshot snapshot) {
-        location.setOverallReviewAvg(snapshot.child(locationName).child("overallReviewAvg").getValue(double.class));
-        location.setQuietnessAvg(snapshot.child(locationName).child("quietnessAvg").getValue(double.class));
-        location.setBusynessAvg(snapshot.child(locationName).child("busynessAvg").getValue(double.class));
-        location.setComfortAvg(snapshot.child(locationName).child("comfortAvg").getValue(double.class));
-    }
 
     private void specifyViewInfo(StudyLocation location) {
         nameTextView.setText(location.getLocationName());

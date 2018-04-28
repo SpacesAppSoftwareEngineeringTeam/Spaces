@@ -36,9 +36,11 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    /**
+     * Provide a reference to the views for each data item
+     * Complex data items may need more than one view per item, and
+     * you provide access to all the views for a data item in a view holder
+     */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public CardView mCardView;       // Containing card for friend
         public TextView mFriendNameView;
@@ -89,7 +91,11 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+    /**
+     * constructor
+     * @param myFriendsDataset
+     * @param myFriendRequestsDataset
+     */
     public FriendListAdapter(ArrayList<User> myFriendsDataset, ArrayList<User> myFriendRequestsDataset) {
         mFriendsDataset = myFriendsDataset;
         mFriendRequestsDataset = myFriendRequestsDataset;
@@ -98,7 +104,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    // Create new views (invoked by the layout manager)
+    /**
+     * Create new views (invoked by the layout manager)
+     */
     @Override
     public FriendListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                        int viewType) {
@@ -109,7 +117,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    /**
+     * Replace the contents of a view (invoked by the layout manager)
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
@@ -139,7 +149,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    /**
+     * Return the size of your dataset (invoked by the layout manager)
+     */
     @Override
     public int getItemCount() {
         return mFriendRequestsDataset.size() + mFriendsDataset.size() ;

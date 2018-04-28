@@ -41,6 +41,8 @@ dependencies {
     //androidTestCompile 'com.android.support.test:runner:0.5'
     implementation 'com.karumi:dexter:4.2.0'
     implementation 'com.leinardi.android:speed-dial:1.0-alpha05'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 }
 
 

@@ -29,6 +29,7 @@ import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 
 public class MainActivity extends BaseActivity
@@ -103,7 +104,10 @@ public class MainActivity extends BaseActivity
         setupBuildingDataset();
     }
 
-    // (based on setupFriendListDataset from FriendListActivity)
+    /**
+     * display the list of spaces
+     * based on setupFriendListDataset from FriendListActivity
+     */
     void setupBuildingDataset() {
         final DatabaseReference locations = mDatabase.child("locations");
 
@@ -113,7 +117,8 @@ public class MainActivity extends BaseActivity
                 ArrayList<StudyLocation> locationList = getLocationsFromDataSnapshot(dataSnapshot);
                 int size = locationList.size();
 
-                for (Iterator<StudyLocation> iter = locationList.iterator(); iter.hasNext();) {
+                // remove locations from the list that should be filtered out
+                for (ListIterator<StudyLocation> iter = locationList.listIterator(); iter.hasNext();) {
                     StudyLocation location = iter.next();
                     if ((outletFilter && location.getOutletAvg() < 0.5) ||
                             (whiteboardFilter && location.getWhiteboardAvg() < 0.5)) {
@@ -125,7 +130,7 @@ public class MainActivity extends BaseActivity
 
                 StudyLocation[] locationsToShow = locationList.toArray( new StudyLocation[size] );
 
-                mainRecyclerAdapter = new SpacesAdapter(locationsToShow);
+                mainRecyclerAdapter = new SpacesAdapter(MainActivity.this, locationsToShow);
                 mainRecyclerView.setAdapter(mainRecyclerAdapter);
             }
 
@@ -138,16 +143,15 @@ public class MainActivity extends BaseActivity
 
     ArrayList<StudyLocation> getLocationsFromDataSnapshot(DataSnapshot dataSnapshot) {
         ArrayList<StudyLocation> locations = new ArrayList<>();
-        for(DataSnapshot location : dataSnapshot.getChildren()) {
-            String locationUID = location.getKey();
-            Log.d(TAG, "Location UID:" + locationUID);
-            String locationName = dataSnapshot.child(locationUID).child("locationName").getValue(String.class);
-            StudyLocation space = new StudyLocation(locationName);
-            space.setOverallReviewAvg(dataSnapshot.child(locationUID).child("overallReviewAvg").getValue(Double.class));
-            space.setOutletAvg(dataSnapshot.child(locationUID).child("outletAvg").getValue(Float.class));
-            space.setWhiteboardAvg(dataSnapshot.child(locationUID).child("whiteboardAvg").getValue(Float.class));
-            locations.add(space);
+        Iterable<DataSnapshot> locationSnapshots = dataSnapshot.getChildren();
+
+        for (DataSnapshot locationSnap : locationSnapshots) {
+            String locationName = locationSnap.getKey();
+            StudyLocation location = new StudyLocation(locationName, locationSnap);
+
+            locations.add(location);
         }
+        Log.d(TAG, "returning from getLocationsFromDataSnapshot");
         return locations;
     }
 
@@ -159,9 +163,12 @@ public class MainActivity extends BaseActivity
         if (mAuth.getCurrentUser() != null) {
             updateSidebar(mAuth.getCurrentUser());
         }
+        //setupBuildingDataset();
     }
 
-    // update the sidebar to show current user's name and email
+    /**
+     * update the sidebar to show current user's name and email
+     */
     public void updateSidebar(FirebaseUser currentUser){
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navView = drawer.findViewById(R.id.nav_view);
@@ -193,15 +200,20 @@ public class MainActivity extends BaseActivity
 
         } else if (id == R.id.nav_locate_friends) {
             start(FriendListActivity.class);
+
         } else if (id == R.id.nav_add_friends) {
             start(AddFriendActivity.class);
+
         } else if (id == R.id.nav_outlets) {
             // toggle outlet filter
             outletFilter = !outletFilter;
+            // reload the list of spaces
             setupBuildingDataset();
+
         } else if (id == R.id.nav_whiteboards) {
             // toggle whiteboard filter
             whiteboardFilter = !whiteboardFilter;
+            // reload the list of spaces
             setupBuildingDataset();
         }
 

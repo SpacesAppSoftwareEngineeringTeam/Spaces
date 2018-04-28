@@ -116,19 +116,20 @@ public class AddSpaceActivity extends BaseActivity {
                         Toast.makeText(AddSpaceActivity.this, "A location with that name already exists", Toast.LENGTH_LONG).show();
                     }
                     else {
+                        // create new location
                         StudyLocation location = new StudyLocation(locationName);
+                        // add location to the database
+                        locations.child(locationName).setValue(location);
                         for (Bitmap pic : pictures) {
                             Uri uri = ImageUploader.getImageUri(v.getContext(), pic);
                             if (uri != null) {
-                                // add image to the StudyLocation
-                                location.addPicture(uri.toString());
                                 // upload image to firebase cloud storage
                                 ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
+                                // add image to the StudyLocation and database
+                                location.addPicture(uri, snapshot);
                                 Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
                             }
                         }
-                        // add new location to database
-                        locations.child(locationName).setValue(location);
 
                         // if this activity was launched by the SelectLocationActivity
                         if (prefilledName != null) {

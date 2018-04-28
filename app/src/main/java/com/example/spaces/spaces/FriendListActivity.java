@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+
 public class FriendListActivity extends BaseActivity {
 
     private static final String TAG = "FriendListActivity";
