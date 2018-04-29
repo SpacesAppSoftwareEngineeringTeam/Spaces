@@ -1,11 +1,14 @@
 package com.example.spaces.spaces;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.bumptech.glide.Glide;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -160,9 +163,11 @@ public class SpacePageActivity extends BaseActivity {
         ImageView[] thumbs = {thumb1, thumb2, thumb3};
         if (snapshot.child(location.getLocationName()).hasChild("pictureIds")) {
             for (int i = 0; i < 3; i++) {
-                if (snapshot.child(location.getLocationName()).child("pictureIds").hasChild(Integer.toString(i)))
+                if (snapshot.child(location.getLocationName()).child("pictureIds").hasChild(Integer.toString(i))) {
                     //@TODO link pictures from database to thumbnail views
-                    System.out.println("add picture functionality here");
+                    Uri uri = snapshot.child(location.getLocationName()).child("pictureIds").child(Integer.toString(i)).getValue(Uri.class);
+                    Glide.with(SpacePageActivity.this).load(uri).into(thumbs[i]);
+                }
             }
         }
     }
