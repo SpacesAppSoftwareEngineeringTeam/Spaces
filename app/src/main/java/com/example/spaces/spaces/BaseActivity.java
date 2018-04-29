@@ -1,5 +1,6 @@
 package com.example.spaces.spaces;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,7 +10,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.DexterError;
@@ -21,6 +24,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -30,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private final long MAX_IMAGE_BYTES = 10000000;
     private Bitmap galleryImage;
     private ProgressDialog mProgressDialog;
+
 
     public void showProgressDialog(String msg) {
         if (mProgressDialog == null) {
@@ -73,6 +78,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+
     /**
      *  opens the user's gallery so they can select an image to upload
      */
@@ -95,55 +101,80 @@ public abstract class BaseActivity extends AppCompatActivity {
                 galleryImage = null;
             }
             else {
-                // ask for storage permissions to upload an image
-                Dexter.withActivity(this)
-                        .withPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .withListener(new PermissionListener() {
-                            @Override
-                            public void onPermissionDenied(PermissionDeniedResponse response) {
-                                Log.d(TAG, "storage permission: denied");
-                            }
-
-                            @Override
-                            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                                token.continuePermissionRequest();
-                            }
-
-                            @Override
-                            public void onPermissionGranted(PermissionGrantedResponse response) {
-                                Log.d(TAG, "storage permission: granted");
-
-                                Bitmap image;
-                                try {
-                                    // copy image from gallery
-                                    image = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
-                                    int minSize = image.getByteCount();
-                                    if (minSize > MAX_IMAGE_BYTES) {
-                                        //@TODO downsize image (low priority)
-                                    }
-                                    galleryImage = image;
-
-
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        })
-                        .withErrorListener(new PermissionRequestErrorListener() {
-                            @Override
-                            public void onError(DexterError error) {
-                                Log.d(TAG, "Error getting image from gallery: " + error.toString());
-                            }
-
-                        }).check();
+                galleryImage = requestGalleryImage(selectedImage);
             }
         }
 
         return galleryImage;
     }
 
+    protected Bitmap requestGalleryImage(final Uri selectedImage) {
+        // ask for storage permissions to upload an image
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Log.d(TAG, "storage permission: denied");
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Log.d(TAG, "storage permission: granted");
+
+                        Bitmap image;
+                        try {
+                            // copy image from gallery
+                            image = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                            int minSize = image.getByteCount();
+                            if (minSize > MAX_IMAGE_BYTES) {
+                                //@TODO downsize image (low priority)
+                            }
+                            galleryImage = image;
+
+
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .withErrorListener(new PermissionRequestErrorListener() {
+                    @Override
+                    public void onError(DexterError error) {
+                        Log.d(TAG, "Error getting image from gallery: " + error.toString());
+                    }
+
+                }).check();
+        return galleryImage;
+    }
+
+    /**
+     * @param dataSnapshot  snapshot of locations in database
+     * @return  ArrayList of StudyLocations created from the snapshot
+     */
+    ArrayList<StudyLocation> getLocationsFromDataSnapshot(DataSnapshot dataSnapshot) {
+        ArrayList<StudyLocation> locations = new ArrayList<>();
+        Iterable<DataSnapshot> locationSnapshots = dataSnapshot.getChildren();
+
+        for (DataSnapshot locationSnap : locationSnapshots) {
+            String locationName = locationSnap.getKey();
+            StudyLocation location = new StudyLocation(locationName, locationSnap);
+
+            locations.add(location);
+        }
+        Log.d(TAG, "returning from getLocationsFromDataSnapshot");
+        return locations;
+    }
+
 
 
 }
+
+

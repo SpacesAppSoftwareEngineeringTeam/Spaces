@@ -21,11 +21,32 @@ import java.io.ByteArrayOutputStream;
 
 class ImageUploader {
 
+    private String url;
+    String getImageUrl(Uri uri, final StorageReference storageRef) {
+        final String imgPath = getImagePath(uri);
+        System.out.println("getImageUrl: imgPath = "+imgPath);
+
+        storageRef.child(imgPath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                url = storageRef.child(imgPath).getDownloadUrl().getResult().toString();
+            }
+        });
+
+        String urlToReturn = url;
+        url = null;
+        return urlToReturn;
+    }
+
     static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "image", null);
         return Uri.parse(path);
+    }
+
+    static String getImagePath(Uri uri) {
+        return "photos/"+uri.toString().substring(uri.toString().lastIndexOf('/'));
     }
 
     // [START upload_from_uri]

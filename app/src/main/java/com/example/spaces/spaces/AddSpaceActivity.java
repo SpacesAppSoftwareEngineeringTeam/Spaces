@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -125,9 +126,12 @@ public class AddSpaceActivity extends BaseActivity {
                             if (uri != null) {
                                 // upload image to firebase cloud storage
                                 ImageUploader.uploadFromUri(uri, TAG, mStorageRef);
+                                // get image url
+                                String url = (new ImageUploader()).getImageUrl(uri, mStorageRef);
+                                Log.d(TAG, "submit: url=" +url+", uri="+uri+", location=\""+locationName+"\"");
                                 // add image to the StudyLocation and database
                                 location.addPicture(uri, snapshot);
-                                Log.d(TAG, "submit: " + uri.toString() + "to location \"" + locationName + "\"");
+                                Log.d(TAG, "submit: " + uri + "to location \"" + locationName + "\"");
                             }
                         }
 

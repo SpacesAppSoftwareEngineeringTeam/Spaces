@@ -141,31 +141,6 @@ public class MainActivity extends BaseActivity
 
     }
 
-    ArrayList<StudyLocation> getLocationsFromDataSnapshot(DataSnapshot dataSnapshot) {
-        ArrayList<StudyLocation> locations = new ArrayList<>();
-        Iterable<DataSnapshot> locationSnapshots = dataSnapshot.getChildren();
-
-        for (DataSnapshot locationSnap : locationSnapshots) {
-            String locationName = locationSnap.getKey();
-            StudyLocation location = new StudyLocation(locationName, locationSnap);
-
-            locations.add(location);
-        }
-        Log.d(TAG, "returning from getLocationsFromDataSnapshot");
-        return locations;
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check auth on Activity start
-        if (mAuth.getCurrentUser() != null) {
-            updateSidebar(mAuth.getCurrentUser());
-        }
-        //setupBuildingDataset();
-    }
-
     /**
      * update the sidebar to show current user's name and email
      */
@@ -178,6 +153,16 @@ public class MainActivity extends BaseActivity
 
         drawerNameField.setText(currentUser.getDisplayName());
         drawerEmailField.setText(currentUser.getEmail());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check auth on Activity start
+        if (mAuth.getCurrentUser() != null) {
+            updateSidebar(mAuth.getCurrentUser());
+        }
+        //setupBuildingDataset();
     }
 
     @Override
