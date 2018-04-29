@@ -116,6 +116,7 @@ public class SpacePageActivity extends BaseActivity {
                     StudyLocation location = new StudyLocation(locationName, snapshot.child(locationName));
                     // populate the space page with info on this location
                     specifyViewInfo(location);
+                    specifyThumbs(location, snapshot);
                 }
             }
             @Override
@@ -153,6 +154,17 @@ public class SpacePageActivity extends BaseActivity {
         quietnessValue.setText(Double.toString(location.getQuietnessAvg()));
         busynessValue.setText(Double.toString(location.getBusynessAvg()));
         comfortValue.setText(Double.toString(location.getComfortAvg()));
+    }
+
+    private void specifyThumbs(StudyLocation location, DataSnapshot snapshot) {
+        ImageView[] thumbs = {thumb1, thumb2, thumb3};
+        if (snapshot.child(location.getLocationName()).hasChild("pictureIds")) {
+            for (int i = 0; i < 3; i++) {
+                if (snapshot.child(location.getLocationName()).child("pictureIds").hasChild(Integer.toString(i)))
+                    //@TODO link pictures from database to thumbnail views
+                    System.out.println("add picture functionality here");
+            }
+        }
     }
 
     private void setViews() {

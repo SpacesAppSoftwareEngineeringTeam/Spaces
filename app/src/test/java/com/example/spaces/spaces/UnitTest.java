@@ -30,7 +30,7 @@ public class UnitTest {
             assertTrue("averages should fall between 0 and 5", avg >= 0 && avg <= 5);
         }
     }
-
+/*
     @Test
     public void valid_friend_list() {
         User u = new User("testUser", "testUser@test.edu");
@@ -97,5 +97,5 @@ public class UnitTest {
             assertTrue("averages should be all be 1.5", avg == 1.5 );
         }
     }
-
+*/
 }

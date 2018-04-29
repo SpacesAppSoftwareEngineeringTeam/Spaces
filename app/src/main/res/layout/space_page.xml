@@ -52,8 +52,7 @@
                 android:layout_height="75dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="40dp"
-                app:srcCompat="@drawable/header_nav_drawer_background" />
+                android:layout_marginTop="40dp" />
 
             <ImageView
                 android:id="@+id/thumb2"
@@ -61,8 +60,7 @@
                 android:layout_height="75dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="100dp"
-                android:layout_marginTop="40dp"
-                app:srcCompat="@drawable/header_nav_drawer_background" />
+                android:layout_marginTop="40dp" />
 
             <ImageView
                 android:id="@+id/thumb3"
@@ -70,8 +68,7 @@
                 android:layout_height="75dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="190dp"
-                android:layout_marginTop="40dp"
-                app:srcCompat="@drawable/header_nav_drawer_background" />
+                android:layout_marginTop="40dp" />
 
             <ImageButton
                 android:id="@+id/seeMorePhotos"

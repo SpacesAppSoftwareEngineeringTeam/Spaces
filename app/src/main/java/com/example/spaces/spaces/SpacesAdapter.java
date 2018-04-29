@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.graphics.Color;
+import java.util.ArrayList;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -45,7 +46,6 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     private DatabaseReference mDatabase;
     private StudyLocation[] locations;
     private ViewHolder[] viewHolders;
-
 
     /**
      * Provide a reference to the views for each data item
