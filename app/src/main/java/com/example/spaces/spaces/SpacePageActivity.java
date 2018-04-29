@@ -3,12 +3,19 @@ package com.example.spaces.spaces;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +42,7 @@ import android.widget.Toast;
 import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Matt on 4/11/2018.
@@ -160,16 +168,65 @@ public class SpacePageActivity extends BaseActivity {
     }
 
     private void specifyThumbs(StudyLocation location, DataSnapshot snapshot) {
-        ImageView[] thumbs = {thumb1, thumb2, thumb3};
-        if (snapshot.child(location.getLocationName()).hasChild("pictureIds")) {
-            for (int i = 0; i < 3; i++) {
-                if (snapshot.child(location.getLocationName()).child("pictureIds").hasChild(Integer.toString(i))) {
-                    //@TODO link pictures from database to thumbnail views
-                    Uri uri = snapshot.child(location.getLocationName()).child("pictureIds").child(Integer.toString(i)).getValue(Uri.class);
-                    Glide.with(SpacePageActivity.this).load(uri).into(thumbs[i]);
-                }
+        // Refactored from SpacesAdapter thumbnail process
+        Map<String, String> picIds = null;
+        if (location.getPictureIds() != null) {
+            picIds = location.getPictureIds();
+            System.out.println(locationName+": found pictures " +picIds);
+        } else System.out.println(locationName + ": had null picture ids");
+
+        if (picIds != null && !picIds.isEmpty()) {
+            Object[] ids = picIds.values().toArray();
+            int loopLength;
+            if (ids.length > 2)
+                loopLength = 3;
+            else
+                loopLength = ids.length;
+            // Select no more than three images (arbitrarily choose the most recent three)
+            for (int i = 0; i < loopLength; i++) {
+                String id = ids[ids.length - i - 1].toString();
+                System.out.println(locationName + ": setting thumbnail");
+                // set an image from this location as the thumbnail
+                String path = ImageUploader.getImagePath(Uri.parse(id));
+                System.out.println("got path " + path);
+                setThumbnail(i, mStorageRef.child(path), Uri.parse(id));
             }
         }
+    }
+
+    private void setThumbnail(final int position, final StorageReference imgRef, final Uri uri) {
+        final ImageView[] thumbs = {thumb1, thumb2, thumb3};
+        RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
+            Handler handler = new Handler();
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                // try again in case there is a local version that hasn't finished uploading
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getLocalCopy();
+                    }
+                    private void getLocalCopy() {
+                        Glide.with(SpacePageActivity.this)
+                                .load(uri)
+                                .into(thumbs[position]);
+                    }
+                });
+                // return false so the error placeholder can be placed
+                return false;
+            }
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                // everything worked out, so probably nothing to do
+                return false;
+            }
+        };
+
+        Glide.with(this)
+                .load(imgRef)
+                .listener(requestListener)
+                .into(thumbs[position]);
+
     }
 
     private void setViews() {
