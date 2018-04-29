@@ -2,8 +2,10 @@ package com.example.spaces.spaces;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,10 @@ import android.graphics.Color;
 import java.util.ArrayList;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -149,9 +154,14 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
 
         if (picIds != null && !picIds.isEmpty()) {
             Object[] ids = picIds.values().toArray();
+            // choose the last image (this is arbitrary)
+            String id = ids[ids.length-1].toString();
             System.out.println(locationName + ": setting thumbnail");
-            // set the most recently added image as the thumbnail
-            setThumbnail(viewHolders[position], Uri.parse(ids[ids.length-1].toString()));
+            // set an image from this location as the thumbnail
+            String path = ImageUploader.getImagePath(Uri.parse(id));
+            System.out.println("got path "+path);
+
+            setThumbnail(position, mStorageRef.child(path), Uri.parse(id));
         }
 
         // set space rating
@@ -180,10 +190,39 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         h.currentLocation = l;
     }
 
-    private void setThumbnail(ViewHolder holder, Uri uri) {
+    private void setThumbnail(final int position, final StorageReference imgRef, final Uri uri) {
+
+        RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
+            Handler handler = new Handler();
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                // try again in case there is a local version that hasn't finished uploading
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getLocalCopy();
+                    }
+                    private void getLocalCopy() {
+                        Glide.with(context)
+                                .load(uri)
+                                .into(viewHolders[position].spaceImage);
+                    }
+                });
+                // return false so the error placeholder can be placed
+                return false;
+            }
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                // everything worked out, so probably nothing to do
+                return false;
+            }
+        };
+
         Glide.with(context)
-                .load(uri)
-                .into(holder.spaceImage);
+                .load(imgRef)
+                .listener(requestListener)
+                .into(viewHolders[position].spaceImage);
+
     }
 
     /**
