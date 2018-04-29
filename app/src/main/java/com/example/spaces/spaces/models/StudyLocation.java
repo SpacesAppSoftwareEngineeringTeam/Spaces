@@ -207,7 +207,6 @@ public class StudyLocation implements Serializable {
     }
 
 
-
     @Exclude
     private void setAverages(DataSnapshot snapshot) {
         DataSnapshot s = snapshot.child("overallReviewAvg");
@@ -232,11 +231,14 @@ public class StudyLocation implements Serializable {
         s = snapshot.child("outletAvg");
         if (s.getValue(double.class) != null)
             setOutletAvg(s.getValue(double.class));
+        s = snapshot.child("computerAvg");
+        if (s.getValue(double.class) != null)
+            setComputerAvg(s.getValue(double.class));
 
     }
 
     @Exclude
-    public void setPictureIds(DataSnapshot snapshot) {
+    private void setPictureIds(DataSnapshot snapshot) {
         Iterable<DataSnapshot> picSnapshots = snapshot.child("pictureIds").getChildren();
         for (DataSnapshot picSnap : picSnapshots) {
             if (picSnap.getValue(String.class) != null)
@@ -244,15 +246,12 @@ public class StudyLocation implements Serializable {
         }
     }
 
-
     @Exclude
     private void updateAllAverages(DatabaseReference locationRef, Review review) {
         int size = reviews.size() + 1;
 
         setQuietnessAvg(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
-        try {
-            locationRef.child("quietnessAvg").setValue(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
-        } catch (Exception e) {e.printStackTrace();}
+        locationRef.child("quietnessAvg").setValue(calcNewAvg(getQuietnessAvg(), size, review.getQuietness()));
         setBusynessAvg(calcNewAvg(getBusynessAvg(), size, review.getBusyness()));
         locationRef.child("busynessAvg").setValue(calcNewAvg(getBusynessAvg(), size, review.getBusyness()));
         setComfortAvg(calcNewAvg(getComfortAvg(), size, review.getComfort()));

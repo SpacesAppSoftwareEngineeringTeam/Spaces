@@ -136,10 +136,14 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
 
     private void setupLocationCard(final String locationName, final int position) {
         // Set card characteristics
-        if (position % 2 == 0)
-            viewHolders[position].mCardView.setCardBackgroundColor(Color.parseColor("#cfd8dc"));//Color.WHITE);
-        else            // Alternate colors for enhanced readability
-            viewHolders[position].mCardView.setCardBackgroundColor(Color.parseColor("#efebe9"));//Color.LTGRAY);
+        if (position % 2 == 0) {
+            viewHolders[position].mCardView.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+            viewHolders[position].spaceName.setBackgroundColor(Color.parseColor("#cfd8dc"));
+        }
+        else {   // Alternate colors for enhanced readability
+            viewHolders[position].mCardView.setCardBackgroundColor(Color.parseColor("#efebe9"));
+            viewHolders[position].spaceName.setBackgroundColor(Color.parseColor("#efebe9"));
+        }
 
         // set space name
         viewHolders[position].spaceName.setText(locationName);
@@ -176,9 +180,9 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         if (locations[position].getOverallReviewAvg() < 2)
             RatingColor = Color.RED;   // 0-1 rating is red
         else if (locations[position].getOverallReviewAvg() < 4)
-            RatingColor = Color.YELLOW; // 2-4 rating is yellow
+            RatingColor = Color.parseColor("#a5ad32");  // 2-4 rating is yellow
         else
-            RatingColor = Color.GREEN;   // 4+ rating is green
+            RatingColor = Color.parseColor("#5d9624");   // 4+ rating is green
         viewHolders[position].spaceRating.setTextSize(18);
         viewHolders[position].spaceRating.setTextColor(RatingColor);
 

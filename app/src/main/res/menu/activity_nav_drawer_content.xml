@@ -18,16 +18,28 @@
             android:title="Add friends" />
     </group>
 
-    <item android:title="Filter Results">
+    <item
+        android:id="@+id/filters"
+        android:title="Filter Results">
         <menu>
             <item
                 android:id="@+id/nav_outlets"
                 android:icon="@mipmap/ic_menu_outlets"
-                android:title="Outlets" />
+                android:checkable="true"
+                android:checked="false"
+                android:title="@string/outlets_toggle_off" />
             <item
                 android:id="@+id/nav_whiteboards"
                 android:icon="@mipmap/ic_menu_whiteboards"
-                android:title="Whiteboards" />
+                android:checkable="true"
+                android:checked="false"
+                android:title="@string/whiteboards_toggle_off" />
+            <item
+                android:id="@+id/nav_computers"
+                android:icon="@drawable/ic_menu_computers"
+                android:checkable="true"
+                android:checked="false"
+                android:title="@string/computers_toggle_off" />
         </menu>
     </item>
 

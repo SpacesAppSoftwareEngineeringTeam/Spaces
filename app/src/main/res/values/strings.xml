@@ -11,6 +11,13 @@
     <string name="case_ID">babs</string>
     <string name="case_email">babs@case.edu</string>
 
+    <string name="outlets_toggle_off">Outlets</string>
+    <string name="outlets_toggle_on">Outlets    (Remove) </string>
+    <string name="whiteboards_toggle_off">Whiteboards</string>
+    <string name="whiteboards_toggle_on">Whiteboards    (Remove) </string>
+    <string name="computers_toggle_off">Computers</string>
+    <string name="computers_toggle_on">Computers    (Remove) </string>
+
     <string name="add_space_title">Add a new study space:</string>
     <string name="add_space_name_hint">"Name (e.g. \"Sears Lobby\")</string>
     <string name="add_space_image_text">Pictures Added:</string>

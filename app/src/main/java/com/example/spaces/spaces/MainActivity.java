@@ -44,6 +44,7 @@ public class MainActivity extends BaseActivity
     private DatabaseReference mDatabase;
     private boolean outletFilter = false;
     private boolean whiteboardFilter = false;
+    private boolean computerFilter = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,9 +121,11 @@ public class MainActivity extends BaseActivity
                 // remove locations from the list that should be filtered out
                 for (ListIterator<StudyLocation> iter = locationList.listIterator(); iter.hasNext();) {
                     StudyLocation location = iter.next();
-                    if ((outletFilter && location.getOutletAvg() < 0.5) ||
-                            (whiteboardFilter && location.getWhiteboardAvg() < 0.5)) {
-                        System.out.println("removing "+location.getLocationName()+" whiteboardAvg="+location.getWhiteboardAvg()+" outletAvg="+location.getWhiteboardAvg());
+
+                    if ((outletFilter && location.getOutletAvg() < 0.5)
+                            || (whiteboardFilter && location.getWhiteboardAvg() < 0.5)
+                            || (computerFilter && location.getComputerAvg() < 0.5)) {
+
                         iter.remove();
                         size--;
                     }
@@ -156,13 +159,27 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_main_screen, menu);
+
+        MenuItem outlets = menu.findItem(R.id.nav_outlets);
+        MenuItem whiteboards = menu.findItem(R.id.nav_whiteboards);
+        MenuItem computers = menu.findItem(R.id.nav_computers);
+        if (outlets != null ) outlets.setChecked(outletFilter);
+        if (whiteboards != null ) whiteboards.setChecked(whiteboardFilter);
+        if (computers != null) computers.setChecked(computerFilter);
+
+        return true;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         // Check auth on Activity start
         if (mAuth.getCurrentUser() != null) {
             updateSidebar(mAuth.getCurrentUser());
         }
-        //setupBuildingDataset();
     }
 
     @Override
@@ -175,31 +192,51 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.search:
+                start(SelectLocationActivity.class, "purpose", "view");
+                break;
+            case R.id.log_out:
+                FirebaseAuth.getInstance().signOut();
+                start(SignInActivity.class);
+                finish();
+                break;
+            default:
+                return false;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_share_spot) {
-
-        } else if (id == R.id.nav_locate_friends) {
-            start(FriendListActivity.class);
-
-        } else if (id == R.id.nav_add_friends) {
-            start(AddFriendActivity.class);
-
-        } else if (id == R.id.nav_outlets) {
-            // toggle outlet filter
-            outletFilter = !outletFilter;
-            // reload the list of spaces
-            setupBuildingDataset();
-
-        } else if (id == R.id.nav_whiteboards) {
-            // toggle whiteboard filter
-            whiteboardFilter = !whiteboardFilter;
-            // reload the list of spaces
-            setupBuildingDataset();
+        switch (id) {
+            case R.id.nav_share_spot:
+                break;
+            case R.id.nav_locate_friends:
+                start(FriendListActivity.class);
+                break;
+            case R.id.nav_add_friends:
+                start(AddFriendActivity.class);
+                break;
+            case R.id.nav_outlets:
+                outletFilter = toggleFilter(item, outletFilter);
+                break;
+            case R.id.nav_whiteboards:
+                whiteboardFilter = toggleFilter(item, whiteboardFilter);
+                break;
+            case R.id.nav_computers:
+                //computerFilter = !item.isChecked();
+                //item.setChecked(computerFilter);
+                computerFilter = toggleFilter(item, computerFilter);
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -207,29 +244,20 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search_main_screen, menu);
-        return true;
-    }
+    private boolean toggleFilter(MenuItem filter, boolean filtered) {
+        final String toAppend = "   (Remove)";
+        filter.setChecked(!filter.isChecked());
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.search) {
-            start(SelectLocationActivity.class, "purpose", "view");
+        if (!filtered) {
+            filter.setTitle(filter.getTitle().toString() + toAppend);
         }
-        if (id == R.id.log_out) {
-            FirebaseAuth.getInstance().signOut();
-            start(SignInActivity.class);
-            finish();
+        else {
+            String oldTitle = filter.getTitle().toString();
+            filter.setTitle(oldTitle.substring(0, oldTitle.length() - toAppend.length()));
         }
 
-        return super.onOptionsItemSelected(item);
+        setupBuildingDataset();
+        return !filtered;
     }
 
 

@@ -102,9 +102,9 @@ public class AddSpaceActivity extends BaseActivity {
             Toast.makeText(AddSpaceActivity.this,
                     "Enter a name", Toast.LENGTH_LONG).show();
         }
-        else if (name.length() > 50) {
+        else if (name.length() > 20) {
             Toast.makeText(AddSpaceActivity.this,
-                    "The name must be under 50 characters", Toast.LENGTH_LONG).show();
+                    "The name must be 20 characters or less", Toast.LENGTH_LONG).show();
         }
         else {
             final DatabaseReference locations = mDatabase.child("locations");
