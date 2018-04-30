@@ -9,16 +9,20 @@
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp">
 
         <TextView
             android:id="@+id/spaceName"
             android:layout_width="304dp"
             android:layout_height="46dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:textSize="30sp"
             app:layout_constraintEnd_toStartOf="@+id/fab"
             app:layout_constraintHorizontal_bias="0.0"
@@ -29,14 +33,15 @@
             android:id="@+id/photosCard"
             android:layout_width="368dp"
             android:layout_height="126dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@id/reviewsCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.481"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/utilityCard">
-
             <TextView
                 android:id="@+id/photosTitle"
                 android:layout_width="wrap_content"
@@ -45,7 +50,6 @@
                 android:layout_marginTop="10dp"
                 android:text="Photos"
                 android:textSize="18sp" />
-
             <ImageView
                 android:id="@+id/thumb1"
                 android:layout_width="75dp"
@@ -53,7 +57,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="40dp" />
-
             <ImageView
                 android:id="@+id/thumb2"
                 android:layout_width="75dp"
@@ -61,7 +64,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="40dp" />
-
             <ImageView
                 android:id="@+id/thumb3"
                 android:layout_width="75dp"
@@ -69,7 +71,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="190dp"
                 android:layout_marginTop="40dp" />
-
             <ImageButton
                 android:id="@+id/seeMorePhotos"
                 android:layout_width="75dp"
@@ -78,22 +79,19 @@
                 android:layout_marginLeft="280dp"
                 android:layout_marginTop="40dp"
                 app:srcCompat="@drawable/ic_menu_gallery" />
-
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:id="@+id/reviewsCard"
             android:layout_width="368dp"
             android:layout_height="361dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/photosCard">
-
             <TextView
                 android:id="@+id/reviewsTitle"
                 android:layout_width="wrap_content"
@@ -102,25 +100,21 @@
                 android:layout_marginTop="10dp"
                 android:text="Reviews"
                 android:textSize="18sp" />
-
-
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:id="@+id/ratingsCard"
             android:layout_width="368dp"
             android:layout_height="298dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/photosCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.481"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spaceName"
             app:layout_constraintVertical_bias="0.045">
-
             <TextView
                 android:id="@+id/ratingsTitle"
                 android:layout_width="wrap_content"
@@ -129,7 +123,6 @@
                 android:layout_marginTop="10dp"
                 android:text="Ratings"
                 android:textSize="18sp" />
-
             <TextView
                 android:id="@+id/overallTitle"
                 android:layout_width="wrap_content"
@@ -137,7 +130,6 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="65dp"
                 android:text="Overall rating" />
-
             <TextView
                 android:id="@+id/quietnessTitle"
                 android:layout_width="wrap_content"
@@ -145,7 +137,6 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="125dp"
                 android:text="Quietness" />
-
             <TextView
                 android:id="@+id/busynessTitle"
                 android:layout_width="wrap_content"
@@ -153,7 +144,6 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="185dp"
                 android:text="Busyness" />
-
             <TextView
                 android:id="@+id/comfortTitle"
                 android:layout_width="wrap_content"
@@ -161,37 +151,94 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="245dp"
                 android:text="Comfort" />
-
             <TextView
                 android:id="@+id/overallValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="200dp"
                 android:layout_marginTop="65dp" />
-
             <TextView
                 android:id="@+id/quietnessValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="200dp"
                 android:layout_marginTop="125dp" />
-
             <TextView
                 android:id="@+id/busynessValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="200dp"
                 android:layout_marginTop="185dp" />
-
             <TextView
                 android:id="@+id/comfortValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="200dp"
                 android:layout_marginTop="245dp" />
-
         </android.support.v7.widget.CardView>
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/utilityCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ratingsCard">
+            <TextView
+                android:id="@+id/utilities_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Utilities"
+                android:textSize="9pt" />
+            <TextView
+                android:id="@+id/whiteboards_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:text="Whiteboards" />
+            <CheckBox
+                android:id="@+id/whiteboards_checkbox"
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="75dp"
+                android:layout_marginBottom="15dp"/>
+            <TextView
+                android:id="@+id/outlets_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="50dp"
+                android:text="Outlets" />
+            <CheckBox
+                android:id="@+id/outlets_checkbox"
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="135dp"
+                android:layout_marginTop="75dp" />
+            <TextView
+                android:id="@+id/computers_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="210dp"
+                android:layout_marginTop="50dp"
+                android:text="Computers" />
+            <CheckBox
+                android:id="@+id/computers_checkbox"
+                android:clickable="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="230dp"
+                android:layout_marginTop="75dp" />
+        </android.support.v7.widget.CardView>
+
+        <!--
         <android.support.v7.widget.CardView
             android:id="@+id/utilityCard"
             android:layout_width="368dp"
@@ -215,7 +262,6 @@
                 android:layout_marginTop="10dp"
                 android:text="Utilities"
                 android:textSize="18sp" />
-
             <TextView
                 android:id="@+id/whiteboardsTitle"
                 android:layout_width="wrap_content"
@@ -223,7 +269,12 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="50dp"
                 android:text="Whiteboards" />
-
+            <CheckBox
+                android:id="@+id/review_whiteboard_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="75dp" />
             <TextView
                 android:id="@+id/computersTitle"
                 android:layout_width="wrap_content"
@@ -231,7 +282,6 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="130dp"
                 android:text="Computers" />
-
             <TextView
                 android:id="@+id/outletsTitle"
                 android:layout_width="wrap_content"
@@ -239,16 +289,16 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="90dp"
                 android:text="Outlets" />
-
         </android.support.v7.widget.CardView>
+        -->
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -179,7 +179,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="230dp"
                 android:layout_marginTop="75dp" />
-
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
