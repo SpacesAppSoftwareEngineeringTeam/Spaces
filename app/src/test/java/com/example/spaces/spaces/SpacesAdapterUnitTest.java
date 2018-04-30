@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
@@ -23,7 +25,10 @@ import android.content.Context;
 public class SpacesAdapterUnitTest {
 
     @Mock
-    View mockView;
+    private View mockView;
+
+    @Rule
+    public MockitoRule mockRule = MockitoJUnit.rule();
 
     private StudyLocation[] testLocations = {new StudyLocation("test1"), new StudyLocation("test2")};
     private SpacesAdapter testAdapter;
@@ -31,9 +36,6 @@ public class SpacesAdapterUnitTest {
 
     @Before
     public void setup() {
-        FirebaseApp.initializeApp(mockView.getContext());
-        testAdapter = new SpacesAdapter(mockView.getContext(), testLocations);
-        testHolders = testAdapter.getHolders();
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.example.spaces.spaces;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
@@ -13,6 +14,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.spaces.spaces.models.StudyLocation;
@@ -54,16 +56,16 @@ public class OpenSpacePageFunctionalTest {
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
-    private MainActivity mainActivity;
+    private MainActivity testActivity;
     private StudyLocation testSpace;
     private String testSpaceName = "SpacePageTest";
 
     @Rule
-    public ActivityTestRule<MainActivity> mainActivityRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<MainActivity> testActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setActivity() {
-        mainActivity = mainActivityRule.getActivity();
+        testActivity = testActivityRule.getActivity();
     }
 
     @Test
@@ -73,6 +75,11 @@ public class OpenSpacePageFunctionalTest {
         assertEquals("com.example.spaces.spaces", appContext.getPackageName());
     }
 
+    @Test
+    public void openPage() {
+        onView(ViewMatchers.withId(R.id.spaceList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+    }
 
     @Test
     public void testRatingsDisplay() {
