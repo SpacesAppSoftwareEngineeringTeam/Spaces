@@ -95,6 +95,12 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
         this.viewHolders = new ViewHolder[locations.length];
     }
 
+    // Context-independent constructor for testing
+    public SpacesAdapter(StudyLocation[] locations) {
+        this.locations = locations;
+        this.viewHolders = new ViewHolder[locations.length];
+    }
+
     /**
      * Create new views (invoked by the layout manager)
      */

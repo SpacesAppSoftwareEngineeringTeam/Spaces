@@ -17,18 +17,12 @@ import java.util.ArrayList;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.content.Context;
 
-@RunWith(MockitoJUnitRunner.class)
 public class SpacesAdapterUnitTest {
-
-    @Mock
-    private View mockView;
-
-    @Rule
-    public MockitoRule mockRule = MockitoJUnit.rule();
 
     private StudyLocation[] testLocations = {new StudyLocation("test1"), new StudyLocation("test2")};
     private SpacesAdapter testAdapter;
@@ -36,6 +30,8 @@ public class SpacesAdapterUnitTest {
 
     @Before
     public void setup() {
+        testAdapter = new SpacesAdapter(testLocations);
+        testHolders = testAdapter.getHolders();
     }
 
     @Test
