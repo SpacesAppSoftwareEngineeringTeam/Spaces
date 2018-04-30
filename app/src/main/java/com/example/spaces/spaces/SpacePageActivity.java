@@ -32,6 +32,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.support.v7.widget.CardView;
 import android.widget.ImageView;
@@ -69,6 +70,11 @@ public class SpacePageActivity extends BaseActivity {
     // Space reviews layout information
     private CardView reviewsCard;
     private TextView reviewsTitle;
+
+    // Space utilities information
+    private CheckBox outletsBox;
+    private CheckBox whiteboardsBox;
+    private CheckBox computersBox;
 
     // Space ratings layout information
     private CardView ratingsCard;
@@ -152,7 +158,7 @@ public class SpacePageActivity extends BaseActivity {
         seeMorePhotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start(GalleryActivity.class);
+                start(GalleryActivity.class, "name", locationName);
             }
         });
 
@@ -165,6 +171,10 @@ public class SpacePageActivity extends BaseActivity {
         quietnessValue.setText(Double.toString(location.getQuietnessAvg()));
         busynessValue.setText(Double.toString(location.getBusynessAvg()));
         comfortValue.setText(Double.toString(location.getComfortAvg()));
+        outletsBox.setChecked(location.getOutletAvg() > 0.5);
+        whiteboardsBox.setChecked(location.getWhiteboardAvg() > 0.5);
+        computersBox.setChecked(location.getComputerAvg() > 0.5);
+
     }
 
     private void specifyThumbs(StudyLocation location, DataSnapshot snapshot) {
@@ -249,6 +259,9 @@ public class SpacePageActivity extends BaseActivity {
         quietnessValue = findViewById(R.id.quietnessValue);
         busynessValue = findViewById(R.id.busynessValue);
         comfortValue = findViewById(R.id.comfortValue);
+        outletsBox = findViewById(R.id.outlets_checkbox);
+        whiteboardsBox = findViewById(R.id.whiteboards_checkbox);
+        computersBox = findViewById(R.id.computers_checkbox);
     }
 
 }
