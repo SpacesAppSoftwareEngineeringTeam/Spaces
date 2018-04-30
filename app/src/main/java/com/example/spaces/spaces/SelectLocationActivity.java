@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ public class SelectLocationActivity extends BaseActivity {
 
     private EditText nameEntry;
     private Button nextButton;
+    private FirebaseAuth mAuth;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabase;
     private String purpose; // the reason a location is being selected e.g. "view" or "review"
@@ -41,6 +43,8 @@ public class SelectLocationActivity extends BaseActivity {
         // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
+
+        mAuth = FirebaseAuth.getInstance();
 
         // get the location name passed to this activity on creation, if any
         Bundle b = getIntent().getExtras();
@@ -72,6 +76,14 @@ public class SelectLocationActivity extends BaseActivity {
                                 else
                                     start(SpacePageActivity.class, "name", name);
                                 break;
+                            case "share":
+                                if (location == null)
+                                    Toast.makeText(SelectLocationActivity.this,
+                                            "That location doesn't exist", Toast.LENGTH_LONG).show();
+                                else
+                                    setUserLocation(name);
+                                    start(FriendListActivity.class);
+                                break;
                             default: break;
                         }
 
@@ -82,13 +94,13 @@ public class SelectLocationActivity extends BaseActivity {
                         de.toException().printStackTrace();
                     }
                 });
-
-
-
             }
         });
     }
 
-
-
+    private void setUserLocation(String locationName){
+        final String userUID = mAuth.getCurrentUser().getUid();
+        final DatabaseReference ref = mDatabase.child("users").child(userUID).child("locationID");
+        ref.setValue(locationName);
+    }
 }

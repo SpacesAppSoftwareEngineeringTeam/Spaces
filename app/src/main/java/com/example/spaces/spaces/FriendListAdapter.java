@@ -130,6 +130,9 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         holder.mFriendNameView.setText(user.getUsername());
         holder.mFriendNameView.setTextSize(24);
 
+        holder.mFriendLocationView.setText(user.getLocationID());
+        holder.mFriendLocationView.setTextSize(24);
+
         if(position < mFriendRequestsDataset.size()){
             holder.mCardView.setCardBackgroundColor(Color.LTGRAY);
 

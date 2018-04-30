@@ -219,6 +219,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_share_spot:
+                start(SelectLocationActivity.class, "purpose", "share");
                 break;
             case R.id.nav_locate_friends:
                 start(FriendListActivity.class);
