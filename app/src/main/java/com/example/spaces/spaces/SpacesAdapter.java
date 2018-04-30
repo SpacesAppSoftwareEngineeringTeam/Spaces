@@ -222,6 +222,7 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
             }
         };
 
+        // load the image from firebase storage
         Glide.with(context)
                 .load(imgRef)
                 .listener(requestListener)
