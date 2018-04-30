@@ -4,16 +4,33 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewAssertion;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 
+import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.regex.Matcher;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -25,21 +42,28 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class OpenSpacePageFunctionalTest {
 
-    @Rule
-    public ActivityTestRule<AddSpaceActivity> mActivityRule = new ActivityTestRule<>(AddSpaceActivity.class);
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabase;
+    private MainActivity mainActivity;
+    private StudyLocation testSpace;
+    private String testSpaceName = "SpacePageTest";
 
-    private AddSpaceActivity mActivity = null;
+    @Rule
+    public ActivityTestRule<MainActivity> mainActivityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void setActivity() {
-        mActivity = mActivityRule.getActivity();
+        mainActivity = mainActivityRule.getActivity();
     }
 
     @Test
@@ -49,15 +73,6 @@ public class OpenSpacePageFunctionalTest {
         assertEquals("com.example.spaces.spaces", appContext.getPackageName());
     }
 
-    @Test
-    public void ensureSpacePageOpens() {
-
-    }
-
-    @Test
-    public void testBackFunctionality() {
-
-    }
 
     @Test
     public void testRatingsDisplay() {

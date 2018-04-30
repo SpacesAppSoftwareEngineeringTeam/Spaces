@@ -152,7 +152,7 @@ public class SpacePageActivity extends BaseActivity {
         seeMorePhotos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                start(GalleryActivity.class, "name", locationName);
+                start(GalleryActivity.class);
             }
         });
 

@@ -18,6 +18,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class SpacePageActivityUnitTest {
+    /*
     private StudyLocation[] testLocations = {new StudyLocation("test1"), new StudyLocation("test2")};
     private SpacesAdapter testAdapter = new SpacesAdapter(testLocations);
 
@@ -25,5 +26,5 @@ public class SpacePageActivityUnitTest {
     public void invalidLocation() {
 
     }
-
+*/
 }

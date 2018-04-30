@@ -236,4 +236,9 @@ public class SpacesAdapter extends RecyclerView.Adapter<SpacesAdapter.ViewHolder
     public int getItemCount() {
         return locations.length;
     }
+
+    // Return unit holders for testing purposes
+    public ViewHolder[] getHolders() {
+        return viewHolders;
+    }
 }

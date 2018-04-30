@@ -1,28 +1,51 @@
 package com.example.spaces.spaces;
 
 import com.example.spaces.spaces.models.StudyLocation;
+import com.google.firebase.FirebaseApp;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.content.Context;
 
+@RunWith(MockitoJUnitRunner.class)
 public class SpacesAdapterUnitTest {
 
+    @Mock
+    View mockView;
+
     private StudyLocation[] testLocations = {new StudyLocation("test1"), new StudyLocation("test2")};
-    private SpacesAdapter testAdapter = new SpacesAdapter(testLocations);
-    private ArrayList<SpacesAdapter.ViewHolder> testHolders = testAdapter.getTestHolders();
+    private SpacesAdapter testAdapter;
+    private SpacesAdapter.ViewHolder[] testHolders;
+
+    @Before
+    public void setup() {
+        FirebaseApp.initializeApp(mockView.getContext());
+        testAdapter = new SpacesAdapter(mockView.getContext(), testLocations);
+        testHolders = testAdapter.getHolders();
+    }
 
     @Test
     public void checkCardColor() {
-        for (int i = 0; i < testHolders.size(); i++) {
+        for (int i = 0; i < testHolders.length; i++) {
             if (i % 2 == 0) {
-                assertTrue("odd cards should be dark gray", testHolders.get(i).mCardView.getCardBackgroundColor().equals(Color.parseColor("#cfd8dc")));
+                assertTrue("odd cards should be dark gray",
+                        testHolders[i].mCardView.getCardBackgroundColor().getDefaultColor() == Color.parseColor("#cfd8dc"));
             }
             else {
-                assertTrue("even cards should be light gray", testHolders.get(i).mCardView.getCardBackgroundColor().equals(Color.parseColor("#efebe9")));
+                assertTrue("even cards should be light gray",
+                        testHolders[i].mCardView.getCardBackgroundColor().getDefaultColor() == Color.parseColor("#efebe9"));
             }
         }
     }
@@ -34,8 +57,9 @@ public class SpacesAdapterUnitTest {
 
     @Test
     public void checkCardText() {
-        for (int i = 0; i < testHolders.size(); i++) {
-            assertTrue("displayed text matches space name", testLocations[i].getLocationName() == testHolders.get(i).SpaceName.getText().toString());
+        for (int i = 0; i < testHolders.length; i++) {
+            assertTrue("displayed text matches space name",
+                    testLocations[i].getLocationName().equals(testHolders[i].spaceName.getText().toString()));
         }
     }
 
