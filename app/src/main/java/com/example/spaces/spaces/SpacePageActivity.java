@@ -207,7 +207,7 @@ public class SpacePageActivity extends BaseActivity {
                         getLocalCopy();
                     }
                     private void getLocalCopy() {
-                        Glide.with(SpacePageActivity.this)
+                        Glide.with(getApplicationContext())
                                 .load(uri)
                                 .into(thumbs[position]);
                     }
@@ -222,7 +222,7 @@ public class SpacePageActivity extends BaseActivity {
             }
         };
 
-        Glide.with(this)
+        Glide.with(getApplicationContext())
                 .load(imgRef)
                 .listener(requestListener)
                 .into(thumbs[position]);
