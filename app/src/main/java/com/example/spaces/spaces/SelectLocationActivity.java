@@ -80,9 +80,10 @@ public class SelectLocationActivity extends BaseActivity {
                                 if (location == null)
                                     Toast.makeText(SelectLocationActivity.this,
                                             "That location doesn't exist", Toast.LENGTH_LONG).show();
-                                else
+                                else{
                                     setUserLocation(name);
                                     start(FriendListActivity.class);
+                                }
                                 break;
                             default: break;
                         }
