@@ -1,71 +1,53 @@
 package com.example.spaces.spaces;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.widget.CardView;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 
-import com.example.spaces.spaces.models.StudyLocation;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.regex.Matcher;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class OpenSpacePageFunctionalTest {
-
-    private StorageReference mStorageRef;
-    private DatabaseReference mDatabase;
-    private MainActivity testActivity;
-    private StudyLocation testSpace;
-    private String testSpaceName = "SpacePageTest";
+public class MainPageFunctionalTest {
 
     @Rule
     public ActivityTestRule<MainActivity> testActivityRule = new ActivityTestRule<>(MainActivity.class);
 
+    private MainActivity testActivity = null;
+    private DatabaseReference mDatabase;
+    private StorageReference mStorageRef;
+    private DatabaseReference locationRef;
+    private String locationName = "A";
+
     @Before
     public void setActivity() {
         testActivity = testActivityRule.getActivity();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        locationRef = mDatabase.child("locations").child(locationName);
     }
 
     @Test
@@ -77,18 +59,31 @@ public class OpenSpacePageFunctionalTest {
 
     @Test
     public void openPage() {
-        onView(ViewMatchers.withId(R.id.spaceList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
+        // open space page for the first space in the list
+        onView(withId(R.id.spaceList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        // check displayed values match those stored in the database for the space
+        onView(ViewMatchers.withId(R.id.spaceName)).check(matches(withText(locationName)));
+        onView(ViewMatchers.withId(R.id.overallValue)).check(matches(withText("0.5")));
+        onView(ViewMatchers.withId(R.id.comfortValue)).check(matches(withText("0.5")));
+        onView(ViewMatchers.withId(R.id.busynessValue)).check(matches(withText("0.5")));
+        onView(ViewMatchers.withId(R.id.quietnessValue)).check(matches(withText("0.5")));
     }
 
     @Test
-    public void testRatingsDisplay() {
-
+    public void openGalleryPage() {
+        // open space page for the first space in the list
+        onView(withId(R.id.spaceList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        // open the gallery page
+        onView(withId(R.id.ratingsCard)).perform(swipeUp());
+        onView(withId(R.id.seeMorePhotos)).perform(click());
     }
 
     @Test
-    public void testThumbnailsDisplay() {
-
+    public void openReviewPage() {
+        // open space page for the first space in the list
+        onView(withId(R.id.spaceList)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        // open the review page
+        onView(withId(R.id.fab)).perform(click());
     }
 
     private Activity getCurrentActivity() {

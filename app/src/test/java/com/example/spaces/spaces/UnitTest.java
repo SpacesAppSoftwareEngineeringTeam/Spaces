@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class UnitTest {
-/*
+
     @Test
     public void valid_averages() {
         StudyLocation sl = new StudyLocation("testLocation");
@@ -97,5 +97,5 @@ public class UnitTest {
             assertTrue("averages should be all be 1.5", avg == 1.5 );
         }
     }
-*/
+
 }
