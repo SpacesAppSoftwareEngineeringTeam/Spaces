@@ -206,7 +206,6 @@ public class StudyLocation implements Serializable {
         reviewRef.setValue(review);
     }
 
-
     @Exclude
     private void setAverages(DataSnapshot snapshot) {
         DataSnapshot s = snapshot.child("overallReviewAvg");
