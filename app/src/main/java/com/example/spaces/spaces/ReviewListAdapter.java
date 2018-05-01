@@ -105,6 +105,8 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.Vi
         String overall = String.valueOf(review.getOverall());
         Log.d(TAG, overall);
         // Set card characteristics
+
+        holder.mCardView.setCardBackgroundColor(Color.LTGRAY);
         holder.mOverallRatingView.setText(overall);
         holder.mOverallRatingView.setTextSize(24);
 
