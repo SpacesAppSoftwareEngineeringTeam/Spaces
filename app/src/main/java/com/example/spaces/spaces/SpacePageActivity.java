@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
 
@@ -16,6 +17,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.spaces.spaces.models.Review;
 import com.example.spaces.spaces.models.StudyLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +45,7 @@ import android.widget.Toast;
 import android.support.design.widget.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -94,6 +97,9 @@ public class SpacePageActivity extends BaseActivity {
     private DatabaseReference mDatabase;
     // [END declare_database_ref]
 
+    private RecyclerView reviewRecyclerView;
+    private RecyclerView.Adapter reviewRecyclerAdapter;
+    private RecyclerView.LayoutManager reviewRecyclerLayoutManager;
 
     /**
      * General constructor
@@ -115,6 +121,11 @@ public class SpacePageActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
+        reviewRecyclerView = findViewById(R.id.reviewList);
+
+        reviewRecyclerLayoutManager = new LinearLayoutManager(this);
+        reviewRecyclerView.setLayoutManager(reviewRecyclerLayoutManager);
+
         // get the location name passed to this activity on creation
         Bundle b = getIntent().getExtras();
         if (b != null) locationName = b.getString("name");
@@ -134,6 +145,7 @@ public class SpacePageActivity extends BaseActivity {
                     // populate the space page with info on this location
                     specifyViewInfo(location);
                     specifyThumbs(location, snapshot);
+                    setupReviewRecycler(snapshot.child(locationName));
                 }
             }
             @Override
@@ -174,7 +186,6 @@ public class SpacePageActivity extends BaseActivity {
         outletsBox.setChecked(location.getOutletAvg() > 0.5);
         whiteboardsBox.setChecked(location.getWhiteboardAvg() > 0.5);
         computersBox.setChecked(location.getComputerAvg() > 0.5);
-
     }
 
     private void specifyThumbs(StudyLocation location, DataSnapshot snapshot) {
@@ -262,6 +273,24 @@ public class SpacePageActivity extends BaseActivity {
         outletsBox = findViewById(R.id.outlets_checkbox);
         whiteboardsBox = findViewById(R.id.whiteboards_checkbox);
         computersBox = findViewById(R.id.computers_checkbox);
+    }
+
+    private void setupReviewRecycler(DataSnapshot dataSnapshot){
+
+        ArrayList<Review> reviews = new ArrayList<Review>();
+        for(DataSnapshot review : dataSnapshot.child("reviews").getChildren()){
+            Double overallRating = review.child("overall").getValue(Double.class);
+            String comment = review.child("comment").getValue(String.class);
+            Review newReview = new Review("","", "");
+            newReview.setOverall(overallRating.floatValue());
+            newReview.setComment(comment);
+            Log.d(TAG, "review comment: " + newReview.getComment());
+            reviews.add(newReview);
+        }
+        Log.d(TAG, "reviewList size: " + reviews.size());
+
+        reviewRecyclerAdapter = new ReviewListAdapter(reviews);
+        reviewRecyclerView.setAdapter(reviewRecyclerAdapter);
     }
 
 }

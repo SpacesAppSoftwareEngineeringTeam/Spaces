@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Steven on 4/12/2018.
  */
-/*
+
 @RunWith(AndroidJUnit4.class)
 public class AddFriendPageFunctionalTest {
 
@@ -56,8 +56,15 @@ public class AddFriendPageFunctionalTest {
         onView(withId(R.id.addFriendEmailText)).perform(typeText("testemail@gmail.com"), closeSoftKeyboard());
         // press submit button
         onView(withId(R.id.submitFriendRequest)).perform(click());
-        // check that the space was not submitted
+        // check that the friend request was not submitted
         onView(withId(R.id.submitFriendRequest)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void ensureValidEmailWorks() {
+        // test a valid email
+        onView(withId(R.id.addFriendEmailText)).perform(typeText("espressoTest2@case.edu"), closeSoftKeyboard());
+        // press submit button
+        onView(withId(R.id.submitFriendRequest)).perform(click());
+    }
 }
-*/
